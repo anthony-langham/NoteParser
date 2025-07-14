@@ -1,23 +1,25 @@
-import { useState } from 'react'
+import { Button } from './components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card'
+import { Input } from './components/ui/input'
+import { Textarea } from './components/ui/textarea'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          Heidi Clinical Decision Support
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Intelligent clinical decision support system for healthcare providers.
-        </p>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+    <div className="min-h-screen bg-background p-8">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Heidi Clinical Decision Support</CardTitle>
+            <CardDescription>shadcn/ui components test</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Input placeholder="Test input component" />
+            <Textarea placeholder="Test textarea component" />
+            <Button>Test Button</Button>
+            <Button variant="outline">Outline Button</Button>
+            <Button variant="secondary">Secondary Button</Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )
