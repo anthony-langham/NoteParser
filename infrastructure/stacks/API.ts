@@ -3,18 +3,12 @@ import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 
 export function API({ stack }: StackContext) {
   // Create a Lambda layer for Python dependencies
-  const pythonDependencyLayer = new Function(stack, "python-deps", {
-    handler: "backend/lambda/health.handler",
-    runtime: "python3.9",
-    layers: [
-      "arn:aws:lambda:us-east-1:770693421928:layer:Klayers-p39-requests:2"
-    ]
-  });
+  // Remove the unused layer definition
 
   const api = new Api(stack, "api", {
     defaults: {
       function: {
-        runtime: "python3.9",
+        runtime: "python3.10",
         timeout: "30 seconds",
         memorySize: "512 MB",
         environment: {
@@ -36,11 +30,11 @@ export function API({ stack }: StackContext) {
         ],
       },
     },
-    // Custom domain configuration for production
-    customDomain: stack.stage === "prod" ? "api.heidimcp.uk" : undefined,
+    // Custom domain configuration for production - disabled for now as we use Cloudflare
+    // customDomain: stack.stage === "prod" ? "api.heidimcp.uk" : undefined,
     cors: {
       allowCredentials: false,
-      allowHeaders: ["Content-Type", "Authorization", "X-Api-Key", "x-api-key"],
+      allowHeaders: ["Content-Type", "Authorization", "X-Api-Key"],
       allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowOrigins: stack.stage === "prod" 
         ? ["https://heidimcp.uk", "https://www.heidimcp.uk"] 

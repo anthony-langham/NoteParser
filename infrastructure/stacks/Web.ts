@@ -34,8 +34,8 @@ export function Web({ stack }: StackContext) {
     // Custom domain configuration for production
     // Note: Using Cloudflare for DNS, SSL cert must be in us-east-1 for CloudFront
     // Infrastructure in eu-west-2 (London), but CloudFront is global
-    // Custom domain configuration for production - CloudFront certificate is validated
-    customDomain: stack.stage === "prod" ? "heidimcp.uk" : undefined,
+    // Custom domain configuration for production - disabled for now as we use Cloudflare
+    // customDomain: stack.stage === "prod" ? "heidimcp.uk" : undefined,
   });
 
   stack.addOutputs({
