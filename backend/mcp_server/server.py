@@ -36,65 +36,8 @@ def load_json_data(file_path: Path) -> Dict[str, Any]:
 
 async def parse_clinical_note(clinical_note: str) -> Dict[str, Any]:
     """Parse clinical note and extract structured patient data."""
-    import re
-    
-    # Extract patient demographics
-    patient_data = {}
-    
-    # Age extraction
-    age_match = re.search(r'Age:\s*(\d+)\s*years?', clinical_note, re.IGNORECASE)
-    if age_match:
-        patient_data['age'] = int(age_match.group(1))
-    
-    # Weight extraction
-    weight_match = re.search(r'Weight:\s*(\d+\.?\d*)\s*kg', clinical_note, re.IGNORECASE)
-    if weight_match:
-        patient_data['weight'] = float(weight_match.group(1))
-    
-    # DOB extraction
-    dob_match = re.search(r'DOB:\s*(\d{1,2}/\d{1,2}/\d{4})', clinical_note, re.IGNORECASE)
-    if dob_match:
-        patient_data['dob'] = dob_match.group(1)
-    
-    # Symptom extraction
-    symptoms = []
-    symptom_patterns = [
-        r'barky cough',
-        r'hoarse voice',
-        r'stridor',
-        r'fever',
-        r'recession',
-        r'work of breathing'
-    ]
-    
-    for pattern in symptom_patterns:
-        if re.search(pattern, clinical_note, re.IGNORECASE):
-            symptoms.append(pattern.replace(r'\\', ''))
-    
-    # Assessment extraction
-    assessment_match = re.search(
-        r'Assessment:\s*(.+?)(?=\n\n|\nPlan:|\Z)', 
-        clinical_note, 
-        re.IGNORECASE | re.DOTALL
-    )
-    assessment = assessment_match.group(1).strip() if assessment_match else ""
-    
-    # Vital signs extraction
-    vitals = {}
-    temp_match = re.search(r'T\s*(\d+\.?\d*)[°C]?', clinical_note)
-    if temp_match:
-        vitals['temperature'] = float(temp_match.group(1))
-    
-    hr_match = re.search(r'HR\s*(\d+)', clinical_note)
-    if hr_match:
-        vitals['heart_rate'] = int(hr_match.group(1))
-    
-    return {
-        'patient_data': patient_data,
-        'symptoms': symptoms,
-        'assessment': assessment,
-        'vitals': vitals
-    }
+    from .tools.parser import parse_clinical_note as comprehensive_parse
+    return await comprehensive_parse(clinical_note)
 
 
 async def identify_condition(symptoms: List[str], assessment: str, patient_age: int = None) -> Dict[str, Any]:

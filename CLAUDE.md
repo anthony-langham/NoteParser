@@ -180,14 +180,14 @@ heidi/
 # Use correct Node version (for SST)
 nvm use
 
-# Install Python dependencies
-pip install -r requirements.txt
+# Install Python dependencies (use python3 for this project)
+pip3 install -r requirements.txt
 
 # Run MCP server locally
-python -m mcp_server.server
+python3 -m mcp_server.server
 
 # Run tests
-pytest tests/
+python3 -m pytest tests/
 
 # Deploy to AWS
 npx sst deploy --stage prod

@@ -14,7 +14,7 @@
 - **#001** [DONE]: Setup project structure, dependencies, and environment configuration
 - **#002** [DONE]: Create JSON data files (conditions with embedded medications, guidelines)
 - **#003** [DONE]: Implement MCP server basic structure
-- **#004** [TODO]: Build clinical note parser tool
+- **#004** [DONE]: Build clinical note parser tool
 - **#005** [TODO]: Implement dose calculation tool
 - **#006** [TODO]: Create condition identification tool
 - **#007** [TODO]: Build treatment plan generator
