@@ -1,4 +1,5 @@
 import { StackContext, StaticSite, use } from "sst/constructs";
+import { ViewerProtocolPolicy, PriceClass } from "aws-cdk-lib/aws-cloudfront";
 import { API } from "./API";
 
 export function Web({ stack }: StackContext) {
@@ -15,15 +16,31 @@ export function Web({ stack }: StackContext) {
       VITE_APP_VERSION: "1.0.0",
       VITE_ENVIRONMENT: stack.stage,
     },
+    // CloudFront distribution configuration
+    cdk: {
+      distribution: {
+        defaultBehavior: {
+          compress: true,
+          viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+          cachePolicy: {
+            cachePolicyId: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad", // CachingDisabled for API calls
+          },
+        },
+        comment: `Heidi Clinical Decision Support - ${stack.stage}`,
+        priceClass: PriceClass.PRICE_CLASS_100, // Use only North America and Europe
+      },
+    },
     // Custom domain configuration for production
-    customDomain: stack.stage === "prod" ? {
-      domainName: "heidimcp.uk",
-      hostedZone: "heidimcp.uk",
-    } : undefined,
+    // Note: Using Cloudflare for DNS, so we'll configure custom domain manually
+    // customDomain: stack.stage === "prod" ? {
+    //   domainName: "heidimcp.uk",
+    //   hostedZone: "heidimcp.uk",
+    // } : undefined,
   });
 
   stack.addOutputs({
     SiteUrl: site.url,
+    CloudFrontDistribution: site.cdk?.distribution?.distributionDomainName,
     CustomDomain: stack.stage === "prod" ? "https://heidimcp.uk" : undefined,
   });
 

@@ -45,7 +45,7 @@ This file contains configuration and context for Claude Code to help with develo
 
 ## Current Status
 
-- **Phase**: Planning & Architecture Complete
+- **Phase**: Backend Foundation Complete (Phase 2 in progress)
 - **Tech Stack**: React + Vite + shadcn/ui → AWS SST + Lambda → Python MCP Server → JSON files
 - **Data Storage**: JSON files (conditions.json with embedded medications, guidelines.json)
 - **Data Structure**: Conditions contain embedded medication dosing for streamlined clinical workflow
@@ -53,6 +53,16 @@ This file contains configuration and context for Claude Code to help with develo
 - **Domain**: heidimcp.uk (Cloudflare hosted)
 - **Authentication**: Simple API key (MVP), upgrade to AWS Cognito later
 - **Cost**: ~$15-35/month for moderate usage
+
+### Completed Tasks (Phase 1 & 2)
+- ✅ **#001-#012**: Complete backend foundation with MCP server, Lambda handlers, and SST infrastructure
+- ✅ **#013**: API Gateway endpoints configured with authentication, health checks, and main processing
+- ✅ **#014**: CloudFront CDN configured with HTTPS redirect, compression, and optimized caching
+
+### Current Priority
+- **#015**: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
+- **#016**: Setup CloudWatch logging
+- **#017**: Deploy and test backend infrastructure
 
 ## Sample Clinical Note
 
