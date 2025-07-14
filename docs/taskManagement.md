@@ -72,7 +72,7 @@
 2. **Completing a task**: Change status from [INPROG] to [DONE]
 3. **Blocking issues**: Change status to [BLOCKED] with reason
 4. **Git commits**: Always include task ID and status (e.g., "#001 [DONE] Setup project structure")
-5. **Git push** ensure you push to github after commit and message done - ask for permission
+5. **Git push**: **MANDATORY** - After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
 
 ### Example Task Status Flow
 
