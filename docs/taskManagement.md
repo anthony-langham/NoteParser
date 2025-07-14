@@ -72,7 +72,8 @@
 2. **Completing a task**: Change status from [INPROG] to [DONE]
 3. **Blocking issues**: Change status to [BLOCKED] with reason
 4. **Git commits**: Always include task ID and status (e.g., "#001 [DONE] Setup project structure")
-5. **Git push**: **MANDATORY** - After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
+5. **Commit ALL files**: **MANDATORY** - At the end of each task, commit ALL changes across ALL files in the ENTIRE repository using `git add .` before committing
+6. **Git push**: **MANDATORY** - After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
 
 ### Example Task Status Flow
 

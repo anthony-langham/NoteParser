@@ -575,7 +575,8 @@ When implementing tasks:
 8. **MANDATORY**: Update docs/taskManagement.md task status BEFORE making git commits
 9. Each task should be completable in a single Claude Code session
 10. Git commit messages should follow the format: "#XXX [DONE] Brief description"
-11. **MANDATORY**: After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
+11. **MANDATORY**: At the end of each task, commit ALL changes across ALL files in the ENTIRE repository using `git add .` before committing
+12. **MANDATORY**: After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
 
 ## Git Commit Format
 
