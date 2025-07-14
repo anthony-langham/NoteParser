@@ -300,6 +300,7 @@ async def parse_clinical_note(clinical_note: str) -> Dict[str, Any]:
     
     if result.success:
         return {
+            'success': True,
             'patient_data': result.data.patient_data.dict(),
             'symptoms': result.data.symptoms,
             'assessment': result.data.assessment,
@@ -311,6 +312,7 @@ async def parse_clinical_note(clinical_note: str) -> Dict[str, Any]:
         }
     else:
         return {
+            'success': False,
             'error': 'Failed to parse clinical note',
             'errors': result.errors
         }

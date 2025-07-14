@@ -18,8 +18,9 @@ def check_data_files() -> dict:
     
     # Check if running in Lambda environment
     if os.environ.get('AWS_LAMBDA_FUNCTION_NAME'):
-        # In Lambda, data files should be in /opt/data/ (Lambda layer)
-        data_dir = Path('/opt/data')
+        # In Lambda, use DATA_PATH environment variable
+        data_path = os.environ.get('DATA_PATH', '/opt/data/')
+        data_dir = Path(data_path)
     else:
         # Local development
         data_dir = Path(__file__).parent.parent / 'mcp_server' / 'data'

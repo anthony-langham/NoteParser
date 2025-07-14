@@ -42,8 +42,8 @@ async def process_clinical_note_async(clinical_note: str):
         patient_data = parsed_data['patient_data']
         
         # Step 2: Identify condition
-        symptoms = patient_data.get('symptoms', [])
-        assessment = patient_data.get('assessment', '')
+        symptoms = parsed_data.get('symptoms', [])
+        assessment = parsed_data.get('assessment', '')
         patient_age = patient_data.get('age')
         
         condition_result = await identify_condition(symptoms, assessment, patient_age)

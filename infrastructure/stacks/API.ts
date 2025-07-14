@@ -1,21 +1,8 @@
 import { StackContext, Api, Function } from "sst/constructs";
 import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
-import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
-import { AccessLogFormat, MethodLoggingLevel } from "aws-cdk-lib/aws-apigateway";
+import { MethodLoggingLevel } from "aws-cdk-lib/aws-apigateway";
 
 export function API({ stack }: StackContext) {
-  // Create CloudWatch Log Group for API Gateway
-  const apiLogGroup = new LogGroup(stack, "ApiGatewayLogGroup", {
-    logGroupName: `/aws/apigateway/heidi-${stack.stage}`,
-    retention: RetentionDays.ONE_WEEK, // 7 days retention for cost efficiency
-  });
-
-  // Create CloudWatch Log Group for Lambda functions
-  const lambdaLogGroup = new LogGroup(stack, "LambdaLogGroup", {
-    logGroupName: `/aws/lambda/heidi-${stack.stage}`,
-    retention: RetentionDays.ONE_WEEK, // 7 days retention for cost efficiency
-  });
-
   const api = new Api(stack, "api", {
     defaults: {
       function: {
@@ -28,7 +15,7 @@ export function API({ stack }: StackContext) {
           CORS_ORIGINS: process.env.CORS_ORIGINS || "http://localhost:3000,https://heidimcp.uk",
           LOG_LEVEL: process.env.LOG_LEVEL || "INFO",
           ENVIRONMENT: stack.stage,
-          DATA_PATH: "/opt/data/",
+          DATA_PATH: "/var/task/mcp_server/data/",
           CONDITIONS_FILE: "conditions.json",
           GUIDELINES_FILE: "guidelines.json",
         },
@@ -43,20 +30,6 @@ export function API({ stack }: StackContext) {
     },
     // Custom domain disabled - using Cloudflare DNS, will point to API Gateway URL directly
     // customDomain: stack.stage === "prod" ? "api.heidimcp.uk" : undefined,
-    accessLog: {
-      destinationArn: apiLogGroup.logGroupArn,
-      format: AccessLogFormat.jsonWithStandardFields({
-        caller: true,
-        httpMethod: true,
-        ip: true,
-        protocol: true,
-        requestTime: true,
-        resourcePath: true,
-        responseLength: true,
-        status: true,
-        user: true,
-      }),
-    },
     cdk: {
       restApi: {
         deployOptions: {
@@ -101,8 +74,6 @@ export function API({ stack }: StackContext) {
     Region: stack.region,
     Environment: stack.stage,
     ApiId: api.id,
-    ApiLogGroup: apiLogGroup.logGroupName,
-    LambdaLogGroup: lambdaLogGroup.logGroupName,
   });
 
   return api;

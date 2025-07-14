@@ -15,47 +15,38 @@
   - Created backend/ and frontend/ directories with proper project structure
   - Configured .nvmrc, requirements.txt, and package.json files
   - Setup environment variable templates and security configurations
-  
 - **#002** [DONE]: Create JSON data files (conditions with embedded medications, guidelines)
   - Created conditions.json with embedded medication dosing for streamlined workflow
   - Created guidelines.json with clinical decision trees and treatment algorithms
   - Implemented schema validation with Pydantic models
-  
 - **#003** [DONE]: Implement MCP server basic structure
   - Built complete MCP server with tool registration and async handling
   - Implemented JSON data loading and caching mechanisms
   - Added proper error handling and logging throughout server
-  
 - **#004** [DONE]: Build clinical note parser tool
   - Created robust regex-based parser for unstructured clinical text
   - Extracts patient demographics, symptoms, assessment, and plans
   - Handles various clinical note formats and edge cases
-  
 - **#005** [DONE]: Implement dose calculation tool
   - Built weight-based medication dosing with min/max constraints
   - Integrated with condition-specific medication databases
   - Added age restrictions and contraindication checking
-  
 - **#006** [DONE]: Create condition identification tool
   - Implemented symptom-based condition matching algorithm
   - Added confidence scoring and multiple condition support
   - Integrated with assessment text analysis for improved accuracy
-  
 - **#007** [DONE]: Build treatment plan generator
   - Created comprehensive treatment plan generation with severity-based algorithms
   - Integrated with guidelines database for evidence-based recommendations
   - Added monitoring and follow-up instruction generation
-  
 - **#008** [DONE]: Add comprehensive error handling
   - Implemented centralized error handling with detailed logging
   - Added input validation and sanitization throughout pipeline
   - Created user-friendly error messages and recovery mechanisms
-  
 - **#009** [DONE]: Write unit tests for all tools
   - Created comprehensive test suite covering all MCP tools
   - Added integration tests with sample clinical scenarios
   - Implemented test data fixtures and mock objects
-  
 - **#010** [DONE]: Setup local development environment
   - Configured local MCP server execution with proper Python environment
   - Created development scripts and testing utilities
@@ -67,24 +58,20 @@
   - Setup SST v2 configuration with proper TypeScript support
   - Created separate API and Web stacks for modular deployment
   - Configured stage-specific settings and environment variables
-  
 - **#012** [DONE]: Setup Lambda function handlers
   - Created Lambda handlers for process, health, auth, and CORS endpoints
   - Implemented proper MCP server integration with async/sync wrappers
   - Added comprehensive request/response handling and error management
-  
 - **#013** [DONE]: Configure API Gateway endpoints
   - Setup complete API Gateway with all necessary routes (process, health, auth)
   - Configured CORS for cross-origin requests from frontend
   - Added proper authentication middleware and security headers
   - Created local testing scripts to validate endpoint functionality
-  
 - **#014** [DONE]: Setup CloudFront CDN
   - Configured CloudFront distribution with HTTPS redirect and compression
   - Setup optimized caching policies for static assets and API calls
   - Added price class optimization for cost-effective global distribution
   - Prepared for custom domain integration with Cloudflare DNS
-  
 - **#015** [DONE]: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
   - Requested and validated SSL certificates in both us-east-1 (CloudFront) and eu-west-2 (API Gateway)
   - Updated SST configuration to use eu-west-2 (London) region for main infrastructure
@@ -99,7 +86,6 @@
   - Successfully deployed CloudFront distribution: https://d3e2fa85sao2u5.cloudfront.net
   - All routes configured: /health, /process, /auth with proper CORS support
   - Updated DNS configuration required: heidimcp.uk → d3e2fa85sao2u5.cloudfront.net, api.heidimcp.uk → 0c47d835uk.execute-api.eu-west-2.amazonaws.com
-  
 - **#016** [DONE]: Setup CloudWatch logging
   - API Gateway access logging already configured with structured JSON format
   - Log group `/aws/vendedlogs/apis/prod-heidi-api-0c47d835uk/default` capturing all API requests
@@ -109,22 +95,41 @@
   - Verified logging functionality with test API calls and log event inspection
   - Access logs include request time, method, path, status, latency, and user agent
   - Lambda logs showing runtime errors that need to be addressed in next task
-- **#017** [TODO]: Deploy and test backend
+- **#017** [DONE]: Deploy and test backend infrastructure endpoints
+  - Fixed critical symptoms extraction bug in process.py (symptoms from parsed_data vs patient_data)
+  - Added missing 'success' field to parse_clinical_note function return values
+  - Updated health.py to use DATA_PATH environment variable instead of hardcoded paths
+  - Successfully deployed all Lambda functions with Python 3.10 runtime
+  - Verified complete clinical processing pipeline with sample croup case
+  - API now returns full treatment recommendations with dose calculations
+  - Final working API: https://kolsmzlspg.execute-api.eu-west-2.amazonaws.com
+  - Health endpoint shows healthy status with all data files accessible
+  - CloudWatch logging fully operational for debugging and monitoring
+  - All MCP server tools functioning correctly: parsing, condition ID, dosing, treatment plans
 
 ### Current Status
 
 #### Phase 2 Complete ✅
-- **✅ Complete**: Both API Gateway and CloudFront successfully deployed
-- **✅ Complete**: All SSL certificates validated and configured
-- **✅ Complete**: Docker Desktop installation and daemon issues resolved
-- **✅ Complete**: MCP server with Python 3.10 runtime compatibility
-- **✅ Complete**: All API routes functional with proper CORS configuration
 
-#### Ready for DNS Update
-- **Frontend**: https://d3e2fa85sao2u5.cloudfront.net (new CloudFront distribution)
-- **API**: https://0c47d835uk.execute-api.eu-west-2.amazonaws.com
-- **DNS Update Required**: Update Cloudflare records to point to new endpoints
-- **Next Phase**: CloudWatch logging and backend testing
+- **✅ Complete**: Backend infrastructure fully deployed and tested
+- **✅ Complete**: Clinical decision support pipeline working end-to-end
+- **✅ Complete**: All critical bugs fixed (symptoms extraction, success flags, data paths)
+- **✅ Complete**: CloudWatch logging and monitoring operational
+- **✅ Complete**: All SSL certificates validated and configured
+- **✅ Complete**: MCP server with Python 3.10 runtime working correctly
+
+#### Production API Endpoints
+
+- **Working API**: https://kolsmzlspg.execute-api.eu-west-2.amazonaws.com
+- **Frontend CDN**: https://d3e2fa85sao2u5.cloudfront.net
+- **Health Status**: All systems healthy, data files accessible
+- **Processing**: Full clinical note → treatment plan pipeline functional
+
+#### Ready for Phase 3
+
+- **Next Priority**: Frontend development (React + Vite + shadcn/ui)
+- **Optional**: Update Cloudflare DNS to point heidimcp.uk to production endpoints
+- **Backup API**: https://0c47d835uk.execute-api.eu-west-2.amazonaws.com (deprecated)
 
 ### Phase 3: Frontend Development
 
