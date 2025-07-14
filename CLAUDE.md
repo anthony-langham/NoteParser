@@ -11,31 +11,47 @@ This file contains configuration and context for Claude Code to help with develo
 
 ## Project Overview
 
-**Core Concept**: Leverage clinical data and context to assist clinician's needs in real time, by helping guide treatment decisions using up-to-date clinical guidelines & tool use.
+**Core Concept**: Leverage clinical data and context to assist clinician's needs in real time, by helping guide treatment decisions using up-to-date clinical guidelines & MCP tool use.
 
 **Key Features**:
+
 - Ingests visit notes or transcripts as input
-- Queries & references local guidelines using RAG/agentic AI
+- Queries & references local guidelines using MCP server tools
 - Calculates weight-based medication doses
 - Returns detailed clinical decision support plans
 
 **Example Use Case**: Pediatric croup management - suggesting appropriate treatment approach and calculating oral steroid dose (prednisone/dexamethasone) based on history, examination, and guideline references.
 
+**Architecture**: React + Vite frontend → AWS API Gateway → Python MCP Server → JSON data files
+
 ## Deliverables
 
 1. **Working prototype (MVP)**
+
    - Accepts unstructured clinical text
-   - Queries relevant local guidelines
+   - Queries relevant local guidelines via MCP tools
    - Calculates weight & evidence-based medication doses
    - Returns detailed management plans grounded in clinical guidelines
+   - **LIVE URL**: `https://heidimcp.uk`
 
 2. **Architecture diagram** (one-page PNG/PDF)
+
    - Major components and data flow
    - Service/API/framework explanations with rationales
 
 3. **Walk-through video** (5-10 minutes)
    - Demonstrate prototype on test cases
    - Explain design decisions and limitations
+
+## Current Status
+
+- **Phase**: Planning & Architecture Complete
+- **Tech Stack**: React + Vite + shadcn/ui → AWS SST + Lambda → Python MCP Server → JSON files
+- **Data Storage**: JSON files (conditions.json, medications.json, guidelines.json)
+- **Deployment**: AWS SST (Serverless Stack) with CloudFront CDN
+- **Domain**: heidimcp.uk (Cloudflare hosted)
+- **Authentication**: Simple API key (MVP), upgrade to AWS Cognito later
+- **Cost**: ~$15-35/month for moderate usage
 
 ## Sample Clinical Note
 
@@ -58,25 +74,525 @@ Plan:
 
 ## Project Structure
 
-This appears to be a new project with minimal initial structure:
-- `README.md` - Project documentation
-- `LICENSE` - MIT license file
-- `CLAUDE.md` - This configuration file
+```
+heidi/
+├── backend/
+│   ├── mcp_server/          # MCP server implementation
+│   │   ├── __init__.py
+│   │   ├── server.py        # Main MCP server
+│   │   ├── tools/           # MCP tools (parser, dosing, etc.)
+│   │   ├── schemas/         # Pydantic data models
+│   │   └── data/            # JSON data files
+│   ├── lambda/              # Lambda function handlers
+│   └── tests/               # Backend tests
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # React components (shadcn/ui)
+│   │   ├── pages/           # Page components
+│   │   ├── lib/             # Utilities and API calls
+│   │   └── styles/          # CSS and theme files
+│   ├── public/              # Static assets
+│   └── dist/                # Build output
+├── infrastructure/
+│   ├── sst.config.ts        # SST configuration
+│   └── stacks/              # AWS CDK stacks
+├── docs/
+│   ├── Overview.md          # Deployment overview
+│   ├── MCP_Implementation_Guide.md  # MCP server guide
+│   └── Planning.md          # Development planning
+├── README.md
+├── LICENSE
+└── CLAUDE.md                # This file
+```
 
 ## Development Commands
 
-<!-- Add common development commands here as they become available -->
-<!-- Examples:
-- Build: `npm run build`
-- Test: `npm test`
-- Lint: `npm run lint`
-- Dev server: `npm run dev`
--->
+### Backend (MCP Server)
+```bash
+# Use correct Node version (for SST)
+nvm use
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Run MCP server locally
+python -m mcp_server.server
+
+# Run tests
+pytest tests/
+
+# Deploy to AWS
+npx sst deploy --stage prod
+```
+
+### Frontend (React)
+```bash
+# Use correct Node version
+nvm use
+
+# Install dependencies
+npm install
+
+# Development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Type checking
+npm run type-check
+
+# Linting
+npm run lint
+```
+
+### Infrastructure
+```bash
+# Use correct Node version
+nvm use
+
+# Deploy infrastructure
+npx sst deploy --stage dev
+npx sst deploy --stage prod
+
+# Remove infrastructure
+npx sst remove --stage dev
+
+# Configure Cloudflare DNS
+# Point heidimcp.uk to CloudFront distribution
+# Point api.heidimcp.uk to API Gateway
+```
+
+### Environment Setup
+```bash
+# Install Node Version Manager (if not installed)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+
+# Use project Node version
+nvm use
+
+# Install dependencies
+npm install
+
+# Copy environment files
+cp .env.example .env
+# Edit .env with your actual values
+```
+
+## Dependencies & Requirements
+
+### Backend Dependencies
+```python
+# requirements.txt
+mcp>=1.0.0
+pydantic>=2.0.0
+pytest>=7.0.0
+python-dateutil>=2.8.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+```
+
+### Frontend Dependencies
+```json
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "typescript": "^5.0.2",
+    "tailwindcss": "^3.3.0",
+    "@radix-ui/react-*": "latest",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^1.14.0"
+  }
+}
+```
+
+### Infrastructure Requirements
+- AWS Account with appropriate permissions
+- Node.js 18+ for SST and frontend (managed via .nvmrc)
+- Python 3.9+ for MCP server
+- AWS CLI configured
+- **Domain**: heidimcp.uk (Cloudflare hosted)
+- Cloudflare account for DNS management
+- NVM (Node Version Manager) for consistent Node.js versions
+
+## Environment Variables & Configuration
+
+### Node Version Management (.nvmrc)
+```
+18.18.0
+```
+
+### Backend (.env)
+```bash
+# Data Configuration
+DATA_PATH=/opt/data/
+CONDITIONS_FILE=conditions.json
+MEDICATIONS_FILE=medications.json
+GUIDELINES_FILE=guidelines.json
+
+# API Configuration
+API_KEY=your-secure-api-key-here
+CORS_ORIGINS=https://heidimcp.uk,http://localhost:3000
+
+# AWS Configuration
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+
+# Logging
+LOG_LEVEL=INFO
+ENVIRONMENT=development
+```
+
+### Frontend (.env)
+```bash
+# API Configuration
+VITE_API_BASE_URL=https://api.heidimcp.uk
+VITE_API_KEY=your-secure-api-key-here
+VITE_APP_NAME=Heidi Clinical Decision Support
+VITE_APP_VERSION=1.0.0
+
+# Environment
+VITE_ENVIRONMENT=development
+```
+
+### Environment File Templates
+
+#### Backend (.env.example)
+```bash
+# Copy this to .env and fill in your values
+API_KEY=generate-a-secure-api-key
+CORS_ORIGINS=https://heidimcp.uk,http://localhost:3000
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-aws-access-key
+AWS_SECRET_ACCESS_KEY=your-aws-secret-key
+LOG_LEVEL=INFO
+ENVIRONMENT=development
+```
+
+#### Frontend (.env.example)
+```bash
+# Copy this to .env and fill in your values
+VITE_API_BASE_URL=https://api.heidimcp.uk
+VITE_API_KEY=your-secure-api-key
+VITE_APP_NAME=Heidi Clinical Decision Support
+VITE_APP_VERSION=1.0.0
+VITE_ENVIRONMENT=development
+```
+
+## Development Task Sequence
+
+### Task Status Indicators
+- **[TODO]**: Task not yet started
+- **[INPROG]**: Task currently in progress
+- **[DONE]**: Task completed and committed
+- **[BLOCKED]**: Task blocked by dependencies or issues
+
+### Phase 1: Backend Foundation
+- **#001** [TODO]: Setup project structure, dependencies, and environment configuration
+- **#002** [TODO]: Create JSON data files (conditions, medications, guidelines)
+- **#003** [TODO]: Implement MCP server basic structure
+- **#004** [TODO]: Build clinical note parser tool
+- **#005** [TODO]: Implement dose calculation tool
+- **#006** [TODO]: Create condition identification tool
+- **#007** [TODO]: Build treatment plan generator
+- **#008** [TODO]: Add comprehensive error handling
+- **#009** [TODO]: Write unit tests for all tools
+- **#010** [TODO]: Setup local development environment
+
+### Phase 2: AWS Infrastructure
+- **#011** [TODO]: Configure SST project structure
+- **#012** [TODO]: Setup Lambda function handlers
+- **#013** [TODO]: Configure API Gateway endpoints
+- **#014** [TODO]: Setup CloudFront CDN
+- **#015** [TODO]: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
+- **#016** [TODO]: Setup CloudWatch logging
+- **#017** [TODO]: Deploy and test backend
+
+### Phase 3: Frontend Development
+- **#018** [TODO]: Initialize React + Vite project
+- **#019** [TODO]: Setup shadcn/ui components
+- **#020** [TODO]: Create clinical note input component
+- **#021** [TODO]: Build treatment plan display
+- **#022** [TODO]: Implement dose calculator interface
+- **#023** [TODO]: Add API integration layer
+- **#024** [TODO]: Implement error handling and loading states
+- **#025** [TODO]: Add responsive design
+- **#026** [TODO]: Deploy frontend to AWS
+
+### Phase 4: Integration & Testing
+- **#027** [TODO]: End-to-end integration testing
+- **#028** [TODO]: Clinical scenario validation
+- **#029** [TODO]: Performance optimization
+- **#030** [TODO]: Create architecture diagram
+- **#031** [TODO]: Record demo video
+- **#032** [TODO]: Final documentation
+
+## Task Guidelines
+
+- Each task should be completable in a single Claude Code session
+- Tasks must be atomic and focused on one specific deliverable
+- Use task IDs (#001, #002, etc.) in all git commits
+- Test locally before committing
+- Each task should include appropriate documentation
+- **Environment Setup**: Always use `nvm use` before starting work
+- **Security**: Never commit .env files or sensitive data
+- **Dependencies**: Use exact Node version specified in .nvmrc
+- **Status Updates**: Update task status in CLAUDE.md when starting/completing tasks
+
+### Task Status Management
+1. **Starting a task**: Change status from [TODO] to [INPROG]
+2. **Completing a task**: Change status from [INPROG] to [DONE]
+3. **Blocking issues**: Change status to [BLOCKED] with reason
+4. **Git commits**: Always include task ID and status (e.g., "#001 [DONE] Setup project structure")
+
+### Example Task Status Flow
+```
+#001 [TODO] → #001 [INPROG] → #001 [DONE]
+```
+
+## Key Technical Decisions
+
+### Why MCP over RAG?
+1. **Deterministic Results**: Medical decisions need reproducible, auditable outputs
+2. **Structured Validation**: Medical data requires strict input/output validation
+3. **Performance**: Direct tool calls faster than semantic search
+4. **Safety**: Explicit logic safer than AI interpretation for medical calculations
+5. **Transparency**: Clear reasoning chain for clinical decisions
+
+### Why JSON Files over Database?
+1. **Simplicity**: No database setup/configuration for MVP
+2. **Version Control**: Clinical data tracked in git with code
+3. **Performance**: Fast file reads from Lambda filesystem
+4. **Cost**: No database costs for MVP
+5. **Development Speed**: Instant data updates without deployment
+
+### Security Considerations
+- No PHI (Personal Health Information) stored in logs
+- HIPAA-compliant data handling practices
+- Encryption at rest (Lambda filesystem)
+- Encryption in transit (HTTPS)
+- Input validation and sanitization
+- Rate limiting on API endpoints
+- **Environment Variables**: Never commit .env files to version control
+- **API Keys**: Use secure, randomly generated API keys
+- **AWS Credentials**: Use IAM roles in production, not hardcoded keys
+- **CORS**: Restrict origins to known domains only
+- **Secrets Management**: Consider AWS Secrets Manager for production
+
+## Git Configuration
+
+### .gitignore
+```
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+.nyc_output
+
+# AWS
+.aws/
+
+# SST
+.sst/
+
+# Build outputs
+dist/
+build/
+
+# Temporary files
+.tmp/
+.cache/
+
+# Medical data (if any test files)
+*.csv
+*.xlsx
+*.json.backup
+
+# Secrets and keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+```
+
+## Testing Strategy
+
+### Backend Testing
+- Unit tests for each MCP tool
+- Integration tests with sample clinical notes
+- Dose calculation validation tests
+- Error handling and edge case tests
+
+### Frontend Testing
+- Component unit tests
+- API integration tests
+- User workflow tests
+- Cross-browser compatibility
+
+### Clinical Validation
+- Test with real clinical scenarios
+- Validate dose calculations against clinical guidelines
+- Verify treatment recommendations
+- Medical professional review
+
+## Deployment Checklist
+
+### Pre-deployment
+- [ ] All tests passing
+- [ ] Environment variables configured
+- [ ] JSON data files validated
+- [ ] API endpoints tested
+- [ ] Frontend builds successfully
+- [ ] Domain and SSL configured
+
+### Post-deployment
+- [ ] Health checks passing
+- [ ] CloudWatch logs configured
+- [ ] Error monitoring active
+- [ ] Performance metrics tracked
+- [ ] Backup and recovery tested
 
 ## Notes
 
-- This is a new project repository for clinical decision support
 - Focus on rapid prototyping, not production-ready scalability
-- Consider using Python with LLM frameworks for implementation
-- Need to implement RAG for guideline retrieval
-- Need medication dose calculation logic
+- MCP server provides deterministic, auditable clinical logic
+- JSON files enable fast iteration and version control
+- Simple API key authentication for MVP
+- Upgrade path to database and advanced auth when needed
+
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+
+# development-workflow
+When implementing tasks:
+1. Update task status to [INPROG] in CLAUDE.md
+2. Use the task ID (#001, #002, etc.) in git commit messages
+3. Test functionality locally before committing
+4. Focus on one atomic deliverable per task
+5. Update CLAUDE.md with new commands as they become available
+6. Mark task as [DONE] when completed
+7. Each task should be completable in a single Claude Code session
+
+## Git Commit Format
+```
+#001 [DONE] Setup project structure and environment configuration
+
+- Created backend/ and frontend/ directories
+- Added .nvmrc file with Node 18.18.0
+- Configured .env.example files
+- Added comprehensive .gitignore
+- Setup requirements.txt for Python dependencies
+```
+
+# quick-start-guide
+For new Claude Code sessions:
+1. **Current Phase**: Planning & Architecture Complete
+2. **Next Task**: #001 [TODO] - Setup project structure and dependencies
+3. **Priority**: Backend foundation (MCP server) before frontend
+4. **Key Files**: Review Overview.md and MCP_Implementation_Guide.md
+5. **Sample Data**: Use provided clinical note for Jack T. (croup case)
+6. **Status Management**: Update task status in CLAUDE.md when starting/completing tasks
+
+# environment-security-checklist
+## Before Starting Development
+- [ ] Install NVM and use correct Node version (`nvm use`)
+- [ ] Copy .env.example to .env for both backend and frontend
+- [ ] Generate secure API keys (minimum 32 characters)
+- [ ] Configure AWS credentials (prefer IAM roles in production)
+- [ ] Verify .gitignore includes all .env files
+- [ ] Never commit actual .env files to version control
+
+## API Key Generation
+```bash
+# Generate secure API key
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
+# Or using OpenSSL
+openssl rand -hex 32
+```
+
+## Environment File Security
+1. **Development**: Use .env files (gitignored)
+2. **Production**: Use AWS Secrets Manager or environment variables
+3. **Never**: Hardcode secrets in source code
+4. **Always**: Use .env.example templates for team sharing
+
+# context-for-claude
+This is a medical decision support system that:
+- Parses clinical notes to extract patient data
+- Calculates medication doses based on weight and condition
+- Generates treatment plans following clinical guidelines
+- Uses MCP (Model Context Protocol) for deterministic, auditable results
+- Stores clinical data in JSON files for rapid MVP development
+- Deploys to AWS using SST (Serverless Stack) framework
+- **Node Version**: Managed via .nvmrc file
+- **Environment**: Secured via .env files (never committed)
+- **Domain**: heidimcp.uk (Cloudflare hosted)
+
+IMPORTANT: This is a defensive medical tool to assist clinicians, not replace clinical judgment. All calculations and recommendations must be validated against established medical guidelines.
