@@ -7,6 +7,13 @@ from typing import Dict, Any, List
 from mcp.server import Server
 from mcp.types import Tool, TextContent
 from pathlib import Path
+from .utils.error_handler import (
+    ErrorHandler, handle_errors, global_error_handler,
+    check_data_availability, check_condition_exists, check_medication_exists,
+    validate_patient_data, validate_medication_dose,
+    DataError, ValidationError, BusinessLogicError, ProcessingError,
+    ErrorCode, ErrorDetails
+)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,16 +29,39 @@ GUIDELINES_FILE = DATA_DIR / "guidelines.json"
 
 
 def load_json_data(file_path: Path) -> Dict[str, Any]:
-    """Load JSON data from file with error handling."""
+    """Load JSON data from file with enhanced error handling."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
+            data = json.load(f)
+            if not isinstance(data, dict):
+                raise DataError(ErrorDetails(
+                    code=ErrorCode.DATA_FILE_CORRUPTED,
+                    message=f"Data file {file_path} does not contain valid JSON object",
+                    details={"file_path": str(file_path), "data_type": type(data).__name__},
+                    recoverable=False
+                ))
+            return data
     except FileNotFoundError:
-        logger.error(f"Data file not found: {file_path}")
-        return {}
+        raise DataError(ErrorDetails(
+            code=ErrorCode.DATA_FILE_NOT_FOUND,
+            message=f"Data file not found: {file_path}",
+            details={"file_path": str(file_path)},
+            recoverable=False
+        ))
     except json.JSONDecodeError as e:
-        logger.error(f"Invalid JSON in {file_path}: {e}")
-        return {}
+        raise DataError(ErrorDetails(
+            code=ErrorCode.DATA_FILE_INVALID_JSON,
+            message=f"Invalid JSON in {file_path}: {e}",
+            details={"file_path": str(file_path), "json_error": str(e)},
+            recoverable=False
+        ))
+    except Exception as e:
+        raise DataError(ErrorDetails(
+            code=ErrorCode.DATA_FILE_CORRUPTED,
+            message=f"Unexpected error loading {file_path}: {e}",
+            details={"file_path": str(file_path), "error": str(e)},
+            recoverable=False
+        ))
 
 
 async def parse_clinical_note(clinical_note: str) -> Dict[str, Any]:
@@ -40,12 +70,27 @@ async def parse_clinical_note(clinical_note: str) -> Dict[str, Any]:
     return await comprehensive_parse(clinical_note)
 
 
+@handle_errors(global_error_handler)
 async def identify_condition(symptoms: List[str], assessment: str, patient_age: int = None) -> Dict[str, Any]:
     """Identify medical condition from symptoms and assessment."""
-    conditions = load_json_data(CONDITIONS_FILE)
+    # Input validation
+    if not symptoms and not assessment:
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INSUFFICIENT_PATIENT_DATA,
+            message="Either symptoms or assessment must be provided",
+            details={"symptoms": symptoms, "assessment": assessment}
+        ))
     
-    if not conditions:
-        return {"error": "Conditions data not available"}
+    if patient_age is not None and (patient_age < 0 or patient_age > 150):
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INVALID_PATIENT_DATA,
+            message="Patient age must be between 0 and 150 years",
+            details={"provided_age": patient_age}
+        ))
+    
+    # Load conditions data
+    conditions = load_json_data(CONDITIONS_FILE)
+    check_data_availability(conditions, "conditions")
     
     # Simple condition matching based on symptoms and assessment
     matches = []
@@ -55,16 +100,19 @@ async def identify_condition(symptoms: List[str], assessment: str, patient_age: 
         
         # Check symptoms match
         primary_symptoms = condition_data.get('symptoms', {}).get('primary', [])
+        matched_symptoms = []
+        
         for symptom in symptoms:
             if any(symptom.lower() in primary_symptom.lower() for primary_symptom in primary_symptoms):
                 score += 2
+                matched_symptoms.append(symptom)
         
         # Check assessment match
         if assessment and condition_data.get('name', '').lower() in assessment.lower():
             score += 3
         
         # Age group check
-        if patient_age and 'age_groups' in condition_data:
+        if patient_age is not None and 'age_groups' in condition_data:
             age_groups = condition_data['age_groups']
             if 'pediatric' in age_groups and patient_age < 18:
                 score += 1
@@ -76,18 +124,21 @@ async def identify_condition(symptoms: List[str], assessment: str, patient_age: 
                 'condition_id': condition_id,
                 'condition_name': condition_data.get('name', condition_id),
                 'confidence_score': score,
-                'matched_symptoms': [s for s in symptoms if any(s.lower() in ps.lower() for ps in primary_symptoms)]
+                'matched_symptoms': matched_symptoms
             })
     
     # Sort by confidence score
     matches.sort(key=lambda x: x['confidence_score'], reverse=True)
     
     return {
+        'success': True,
         'matches': matches,
-        'top_match': matches[0] if matches else None
+        'top_match': matches[0] if matches else None,
+        'total_conditions_evaluated': len(conditions)
     }
 
 
+@handle_errors(global_error_handler)
 async def calculate_medication_dose(
     medication: str, 
     condition: str, 
@@ -95,35 +146,56 @@ async def calculate_medication_dose(
     severity: str = "moderate"
 ) -> Dict[str, Any]:
     """Calculate weight-based medication dose."""
-    conditions = load_json_data(CONDITIONS_FILE)
+    # Input validation
+    if not medication or not condition:
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INSUFFICIENT_PATIENT_DATA,
+            message="Medication and condition must be provided",
+            details={"medication": medication, "condition": condition}
+        ))
     
-    if not conditions:
-        return {"error": "Conditions data not available"}
+    if patient_weight <= 0 or patient_weight > 500:
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INVALID_PATIENT_DATA,
+            message="Patient weight must be between 0.5 and 500 kg",
+            details={"provided_weight": patient_weight}
+        ))
+    
+    # Load conditions data
+    conditions = load_json_data(CONDITIONS_FILE)
+    check_data_availability(conditions, "conditions")
     
     # Find condition
     condition_data = None
+    condition_id = None
     for cond_id, cond_data in conditions.items():
         if cond_id == condition or cond_data.get('name', '').lower() == condition.lower():
             condition_data = cond_data
+            condition_id = cond_id
             break
     
     if not condition_data:
-        return {"error": f"Condition '{condition}' not found"}
+        check_condition_exists(condition, conditions)
     
     # Find medication in condition
     medications = condition_data.get('medications', {})
-    medication_data = None
+    check_medication_exists(medication, condition_id, medications)
     
+    medication_data = None
     for med_line in ['first_line', 'second_line']:
         if med_line in medications and medication in medications[med_line]:
             medication_data = medications[med_line][medication]
             break
     
-    if not medication_data:
-        return {"error": f"Medication '{medication}' not found for condition '{condition}'"}
-    
     # Calculate dose
     dose_per_kg = medication_data.get('dose_mg_per_kg', 0)
+    if dose_per_kg <= 0:
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INVALID_DOSE_CALCULATION,
+            message=f"Invalid dose per kg for {medication}: {dose_per_kg}",
+            details={"medication": medication, "dose_per_kg": dose_per_kg}
+        ))
+    
     calculated_dose = dose_per_kg * patient_weight
     
     # Apply limits
@@ -132,7 +204,12 @@ async def calculate_medication_dose(
     
     final_dose = min(max(calculated_dose, min_dose), max_dose)
     
+    # Validate final dose is reasonable
+    if final_dose != calculated_dose:
+        logger.warning(f"Dose adjusted from {calculated_dose}mg to {final_dose}mg for {medication}")
+    
     return {
+        "success": True,
         "medication": medication,
         "condition": condition,
         "patient_weight": patient_weight,
@@ -144,10 +221,14 @@ async def calculate_medication_dose(
         "frequency": medication_data.get('frequency', 'daily'),
         "duration": medication_data.get('duration', ''),
         "max_dose": max_dose,
-        "dosing_rationale": f"Calculated at {dose_per_kg} mg/kg for {patient_weight}kg patient"
+        "min_dose": min_dose,
+        "dosing_rationale": f"Calculated at {dose_per_kg} mg/kg for {patient_weight}kg patient",
+        "contraindications": medication_data.get('contraindications', []),
+        "clinical_notes": medication_data.get('clinical_notes', '')
     }
 
 
+@handle_errors(global_error_handler)
 async def generate_treatment_plan(
     condition: str, 
     severity: str, 
@@ -155,10 +236,34 @@ async def generate_treatment_plan(
     calculated_doses: List[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """Generate comprehensive treatment plan using enhanced planner."""
+    # Input validation
+    if not condition or not severity:
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INSUFFICIENT_PATIENT_DATA,
+            message="Condition and severity must be provided",
+            details={"condition": condition, "severity": severity}
+        ))
+    
+    if severity not in ['mild', 'moderate', 'severe']:
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INVALID_PATIENT_DATA,
+            message="Severity must be 'mild', 'moderate', or 'severe'",
+            details={"provided_severity": severity}
+        ))
+    
+    if not patient_data:
+        raise ValidationError(ErrorDetails(
+            code=ErrorCode.INSUFFICIENT_PATIENT_DATA,
+            message="Patient data is required for treatment plan generation",
+            details={"patient_data": patient_data}
+        ))
+    
     from .tools.treatment_planner import generate_comprehensive_treatment_plan
     
     # Convert condition name to condition_id if needed
     conditions = load_json_data(CONDITIONS_FILE)
+    check_data_availability(conditions, "conditions")
+    
     condition_id = condition
     
     # Find condition ID from name if needed
@@ -168,12 +273,19 @@ async def generate_treatment_plan(
                 condition_id = cond_id
                 break
     
+    # Ensure condition exists
+    check_condition_exists(condition_id, conditions)
+    
     result = await generate_comprehensive_treatment_plan(condition_id, severity, patient_data, calculated_doses)
     
     if result.get('success'):
         return result['treatment_plan']
     else:
-        return {"error": result.get('error', 'Failed to generate treatment plan')}
+        raise ProcessingError(ErrorDetails(
+            code=ErrorCode.TREATMENT_PLAN_ERROR,
+            message=result.get('error', 'Failed to generate treatment plan'),
+            details={"condition": condition, "severity": severity}
+        ))
 
 
 @app.list_tools()
@@ -237,20 +349,18 @@ async def list_tools():
 
 @app.call_tool()
 async def call_tool(name: str, arguments: dict):
-    """Handle tool calls."""
+    """Handle tool calls with enhanced error handling."""
     try:
         if name == "parse_clinical_note":
             result = await parse_clinical_note(arguments["clinical_note"])
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
-        
+            
         elif name == "identify_condition":
             result = await identify_condition(
                 arguments["symptoms"],
                 arguments["assessment"],
                 arguments.get("patient_age")
             )
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
-        
+            
         elif name == "calculate_medication_dose":
             result = await calculate_medication_dose(
                 arguments["medication"],
@@ -258,8 +368,7 @@ async def call_tool(name: str, arguments: dict):
                 arguments["patient_weight"],
                 arguments.get("severity", "moderate")
             )
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
-        
+            
         elif name == "generate_treatment_plan":
             result = await generate_treatment_plan(
                 arguments["condition"],
@@ -267,14 +376,27 @@ async def call_tool(name: str, arguments: dict):
                 arguments["patient_data"],
                 arguments.get("calculated_doses", [])
             )
-            return [TextContent(type="text", text=json.dumps(result, indent=2))]
-        
+            
         else:
-            return [TextContent(type="text", text=f"Unknown tool: {name}")]
+            error_response = global_error_handler.create_error_response(
+                ProcessingError(ErrorDetails(
+                    code=ErrorCode.MCP_TOOL_ERROR,
+                    message=f"Unknown tool: {name}",
+                    details={"tool_name": name, "available_tools": ["parse_clinical_note", "identify_condition", "calculate_medication_dose", "generate_treatment_plan"]}
+                ))
+            )
+            return [TextContent(type="text", text=json.dumps(error_response, indent=2))]
+        
+        # Return successful result
+        return [TextContent(type="text", text=json.dumps(result, indent=2))]
             
     except Exception as e:
-        logger.error(f"Error in tool {name}: {str(e)}")
-        return [TextContent(type="text", text=f"Error: {str(e)}")]
+        # Handle all errors through the global error handler
+        error_response = global_error_handler.handle_exception(e, {
+            "tool_name": name,
+            "arguments": arguments
+        })
+        return [TextContent(type="text", text=json.dumps(error_response, indent=2))]
 
 
 def main():
