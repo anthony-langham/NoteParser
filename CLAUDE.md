@@ -582,11 +582,12 @@ When implementing tasks:
 5. Focus on one atomic deliverable per task
 6. Update CLAUDE.md with new commands as they become available
 7. **MANDATORY**: Mark task as [DONE] in docs/taskManagement.md when completed
-8. **MANDATORY**: Update docs/taskManagement.md task status BEFORE making git commits
-9. Each task should be completable in a single Claude Code session
-10. Git commit messages should follow the format: "#XXX [DONE] Brief description"
-11. **MANDATORY**: At the end of each task, commit ALL changes across ALL files in the ENTIRE repository using `git add .` before committing
-12. **MANDATORY**: After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
+8. **MANDATORY**: Add detailed completion information to docs/taskManagement.md with bullet points explaining all work done
+9. **MANDATORY**: Update docs/taskManagement.md task status BEFORE making git commits
+10. Each task should be completable in a single Claude Code session
+11. Git commit messages should follow the format: "#XXX [DONE] Brief description"
+12. **MANDATORY**: At the end of each task, commit ALL changes across ALL files in the ENTIRE repository using `git add .` before committing
+13. **MANDATORY**: After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
 
 ## Git Commit Format
 
@@ -606,12 +607,30 @@ When implementing tasks:
 **CRITICAL**: When completing a task, you MUST:
 
 1. Update the task status from [INPROG] to [DONE] in docs/taskManagement.md
-2. Ensure the update is made BEFORE creating git commits
-3. Use git commit messages that include the task ID and status
-4. Example workflow:
+2. **MANDATORY**: Add detailed completion information to docs/taskManagement.md following this format:
+   ```
+   - **#XXX** [DONE]: Task Title
+     - Detailed bullet point 1 explaining what was implemented/configured
+     - Detailed bullet point 2 explaining technical decisions made
+     - Detailed bullet point 3 explaining files created/modified
+     - Additional bullet points covering all significant work done
+   ```
+3. Ensure the update is made BEFORE creating git commits
+4. Use git commit messages that include the task ID and status
+5. Example workflow:
    - Start task: Change `#001 [TODO]` to `#001 [INPROG]` in docs/taskManagement.md
    - Complete task: Change `#001 [INPROG]` to `#001 [DONE]` in docs/taskManagement.md
+   - **Add detailed completion notes** under the task with bullet points explaining:
+     - Files created/modified with brief description of contents
+     - Technical decisions made and rationale
+     - Configuration settings applied
+     - Integration points established
+     - Testing performed and results
+     - Dependencies added or updated
+     - Security considerations addressed
    - Commit: `git commit -m "#001 [DONE] Setup project structure and dependencies"`
+
+**This detailed documentation is MANDATORY for every task completion and must be done BEFORE the git commit.**
 
 # quick-start-guide
 
