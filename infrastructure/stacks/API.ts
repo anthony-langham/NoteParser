@@ -1,4 +1,5 @@
 import { StackContext, Api, Function } from "sst/constructs";
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 
 export function API({ stack }: StackContext) {
   // Create a Lambda layer for Python dependencies
@@ -22,7 +23,6 @@ export function API({ stack }: StackContext) {
           CORS_ORIGINS: process.env.CORS_ORIGINS || "http://localhost:3000,https://heidimcp.uk",
           LOG_LEVEL: process.env.LOG_LEVEL || "INFO",
           ENVIRONMENT: stack.stage,
-          AWS_REGION: stack.region,
           DATA_PATH: "/opt/data/",
           CONDITIONS_FILE: "conditions.json",
           GUIDELINES_FILE: "guidelines.json",
@@ -30,12 +30,14 @@ export function API({ stack }: StackContext) {
         // Copy MCP server files and data to Lambda
         copyFiles: [
           {
-            from: "backend/mcp_server",
+            from: "../backend/mcp_server",
             to: "mcp_server"
           }
         ],
       },
     },
+    // Custom domain configuration for production
+    customDomain: stack.stage === "prod" ? "api.heidimcp.uk" : undefined,
     cors: {
       allowCredentials: false,
       allowHeaders: ["Content-Type", "Authorization", "X-Api-Key", "x-api-key"],
@@ -46,22 +48,22 @@ export function API({ stack }: StackContext) {
     },
     routes: {
       // Main application routes
-      "POST /process": "backend/lambda/process.handler",
-      "GET /health": "backend/lambda/health.handler",
-      "GET /auth": "backend/lambda/auth.handler",
-      "POST /auth": "backend/lambda/auth.handler",
+      "POST /process": "../backend/lambda/process.handler",
+      "GET /health": "../backend/lambda/health.handler",
+      "GET /auth": "../backend/lambda/auth.handler",
+      "POST /auth": "../backend/lambda/auth.handler",
       
       // API versioned routes
-      "POST /api/process": "backend/lambda/process.handler",
-      "GET /api/health": "backend/lambda/health.handler",
-      "GET /api/auth": "backend/lambda/auth.handler",
-      "POST /api/auth": "backend/lambda/auth.handler",
+      "POST /api/process": "../backend/lambda/process.handler",
+      "GET /api/health": "../backend/lambda/health.handler",
+      "GET /api/auth": "../backend/lambda/auth.handler",
+      "POST /api/auth": "../backend/lambda/auth.handler",
       
       // CORS support
-      "OPTIONS /{proxy+}": "backend/lambda/cors.handler",
+      "OPTIONS /{proxy+}": "../backend/lambda/cors.handler",
       
       // Fallback router (handles any unmatched routes)
-      "$default": "backend/lambda/main.handler",
+      "$default": "../backend/lambda/main.handler",
     },
   });
 

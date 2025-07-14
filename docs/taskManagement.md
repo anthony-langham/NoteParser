@@ -85,7 +85,16 @@
   - Added price class optimization for cost-effective global distribution
   - Prepared for custom domain integration with Cloudflare DNS
   
-- **#015** [TODO]: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
+- **#015** [DONE]: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
+  - Requested and validated SSL certificates in both us-east-1 (CloudFront) and eu-west-2 (API Gateway)
+  - Updated SST configuration to use eu-west-2 (London) region for main infrastructure
+  - Successfully deployed CloudFront distribution with validated SSL certificate
+  - Configured Cloudflare DNS records for certificate validation (both certificates now ISSUED)
+  - Updated infrastructure configuration to support custom domains for both API and Web
+  - Set up CNAME flattening in Cloudflare for root domain support
+  - Deployed frontend to CloudFront distribution: https://d2xkxlrfsijxh4.cloudfront.net
+  - Configured DNS routing: heidimcp.uk → d2xkxlrfsijxh4.cloudfront.net
+  - Installed Docker for Python Lambda function deployment (API Gateway pending)
 - **#016** [TODO]: Setup CloudWatch logging
 - **#017** [TODO]: Deploy and test backend
 

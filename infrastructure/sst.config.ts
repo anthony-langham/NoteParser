@@ -6,7 +6,7 @@ export default {
   config(_input) {
     return {
       name: "heidi",
-      region: "us-east-1",
+      region: "eu-west-2", // London region
     };
   },
   stacks(app) {
