@@ -295,7 +295,7 @@ VITE_ENVIRONMENT=development
 - **[BLOCKED]**: Task blocked by dependencies or issues
 
 ### Phase 1: Backend Foundation
-- **#001** [TODO]: Setup project structure, dependencies, and environment configuration
+- **#001** [INPROG]: Setup project structure, dependencies, and environment configuration
 - **#002** [TODO]: Create JSON data files (conditions, medications, guidelines)
 - **#003** [TODO]: Implement MCP server basic structure
 - **#004** [TODO]: Build clinical note parser tool

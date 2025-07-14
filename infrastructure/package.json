@@ -1,0 +1,21 @@
+{
+  "name": "heidi-infrastructure",
+  "version": "1.0.0",
+  "description": "Heidi Infrastructure with SST",
+  "type": "module",
+  "scripts": {
+    "dev": "sst dev",
+    "build": "sst build",
+    "deploy": "sst deploy",
+    "remove": "sst remove"
+  },
+  "dependencies": {
+    "sst": "^2.35.0",
+    "aws-cdk-lib": "^2.96.0",
+    "constructs": "^10.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.7",
+    "typescript": "^5.2.2"
+  }
+}
