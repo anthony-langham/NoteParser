@@ -7,7 +7,9 @@
     "dev": "sst dev",
     "build": "sst build",
     "deploy": "sst deploy",
-    "remove": "sst remove"
+    "remove": "sst remove",
+    "type-check": "tsc --noEmit",
+    "test": "npm run type-check"
   },
   "dependencies": {
     "sst": "^2.35.0",
