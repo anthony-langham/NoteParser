@@ -76,6 +76,7 @@ Plan:
 ## Data Structure
 
 ### conditions.json Schema
+
 ```json
 {
   "condition_id": {
@@ -89,7 +90,7 @@ Plan:
     },
     "severity_scales": {
       "mild": "criteria",
-      "moderate": "criteria", 
+      "moderate": "criteria",
       "severe": "criteria"
     },
     "medications": {
@@ -114,6 +115,7 @@ Plan:
 ```
 
 ### guidelines.json Schema
+
 ```json
 {
   "guideline_id": {
@@ -176,6 +178,7 @@ heidi/
 ## Development Commands
 
 ### Backend (MCP Server)
+
 ```bash
 # Use correct Node version (for SST)
 nvm use
@@ -194,6 +197,7 @@ npx sst deploy --stage prod
 ```
 
 ### Frontend (React)
+
 ```bash
 # Use correct Node version
 nvm use
@@ -218,6 +222,7 @@ npm run lint
 ```
 
 ### Infrastructure
+
 ```bash
 # Use correct Node version
 nvm use
@@ -235,6 +240,7 @@ npx sst remove --stage dev
 ```
 
 ### Environment Setup
+
 ```bash
 # Install Node Version Manager (if not installed)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
@@ -253,6 +259,7 @@ cp .env.example .env
 ## Dependencies & Requirements
 
 ### Backend Dependencies
+
 ```python
 # requirements.txt
 mcp>=1.0.0
@@ -264,6 +271,7 @@ uvicorn>=0.24.0
 ```
 
 ### Frontend Dependencies
+
 ```json
 {
   "dependencies": {
@@ -281,6 +289,7 @@ uvicorn>=0.24.0
 ```
 
 ### Infrastructure Requirements
+
 - AWS Account with appropriate permissions
 - Node.js 18+ for SST and frontend (managed via .nvmrc)
 - Python 3.9+ for MCP server
@@ -292,11 +301,13 @@ uvicorn>=0.24.0
 ## Environment Variables & Configuration
 
 ### Node Version Management (.nvmrc)
+
 ```
 18.18.0
 ```
 
 ### Backend (.env)
+
 ```bash
 # Data Configuration
 DATA_PATH=/opt/data/
@@ -318,6 +329,7 @@ ENVIRONMENT=development
 ```
 
 ### Frontend (.env)
+
 ```bash
 # API Configuration
 VITE_API_BASE_URL=https://api.heidimcp.uk
@@ -332,6 +344,7 @@ VITE_ENVIRONMENT=development
 ### Environment File Templates
 
 #### Backend (.env.example)
+
 ```bash
 # Copy this to .env and fill in your values
 API_KEY=generate-a-secure-api-key
@@ -344,6 +357,7 @@ ENVIRONMENT=development
 ```
 
 #### Frontend (.env.example)
+
 ```bash
 # Copy this to .env and fill in your values
 VITE_API_BASE_URL=https://api.heidimcp.uk
@@ -360,6 +374,7 @@ See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking 
 ## Key Technical Decisions
 
 ### Why MCP over RAG?
+
 1. **Deterministic Results**: Medical decisions need reproducible, auditable outputs
 2. **Structured Validation**: Medical data requires strict input/output validation
 3. **Performance**: Direct tool calls faster than semantic search
@@ -367,6 +382,7 @@ See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking 
 5. **Transparency**: Clear reasoning chain for clinical decisions
 
 ### Why JSON Files over Database?
+
 1. **Simplicity**: No database setup/configuration for MVP
 2. **Version Control**: Clinical data tracked in git with code
 3. **Performance**: Fast file reads from Lambda filesystem
@@ -374,6 +390,7 @@ See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking 
 5. **Development Speed**: Instant data updates without deployment
 
 ### Why Embedded Medications in Conditions?
+
 1. **Clinical Workflow**: Aligns with clinical thinking (condition → treatment)
 2. **Atomic Updates**: Condition and treatment data maintained together
 3. **Reduced Complexity**: No need to manage relationships between separate files
@@ -381,6 +398,7 @@ See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking 
 5. **Easier Validation**: Related data validated as a unit
 
 ### Security Considerations
+
 - No PHI (Personal Health Information) stored in logs
 - HIPAA-compliant data handling practices
 - Encryption at rest (Lambda filesystem)
@@ -396,6 +414,7 @@ See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking 
 ## Git Configuration
 
 ### .gitignore
+
 ```
 # Environment variables
 .env
@@ -488,18 +507,21 @@ build/
 ## Testing Strategy
 
 ### Backend Testing
+
 - Unit tests for each MCP tool
 - Integration tests with sample clinical notes
 - Dose calculation validation tests
 - Error handling and edge case tests
 
 ### Frontend Testing
+
 - Component unit tests
 - API integration tests
 - User workflow tests
 - Cross-browser compatibility
 
 ### Clinical Validation
+
 - Test with real clinical scenarios
 - Validate dose calculations against clinical guidelines
 - Verify treatment recommendations
@@ -508,6 +530,7 @@ build/
 ## Deployment Checklist
 
 ### Pre-deployment
+
 - [ ] All tests passing
 - [ ] Environment variables configured
 - [ ] JSON data files validated
@@ -516,6 +539,7 @@ build/
 - [ ] Domain and SSL configured
 
 ### Post-deployment
+
 - [ ] Health checks passing
 - [ ] CloudWatch logs configured
 - [ ] Error monitoring active
@@ -531,25 +555,30 @@ build/
 - Upgrade path to database and advanced auth when needed
 
 # important-instruction-reminders
+
 Do what has been asked; nothing more, nothing less.
 NEVER create files unless they're absolutely necessary for achieving your goal.
 ALWAYS prefer editing an existing file to creating a new one.
-NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.
+NEVER proactively create documentation files (\*.md) or README files. Only create documentation files if explicitly requested by the User.
 
 # development-workflow
+
 When implementing tasks:
+
 1. Update task status to [INPROG] in docs/taskManagement.md when starting a task
 2. Use the task ID (#001, #002, etc.) in git commit messages
-3. Test functionality locally before committing
-4. Focus on one atomic deliverable per task
-5. Update CLAUDE.md with new commands as they become available
-6. **MANDATORY**: Mark task as [DONE] in docs/taskManagement.md when completed
-7. **MANDATORY**: Update docs/taskManagement.md task status BEFORE making git commits
-8. Each task should be completable in a single Claude Code session
-9. Git commit messages should follow the format: "#XXX [DONE] Brief description"
-10. **MANDATORY**: After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
+3. Think really hard before commencing
+4. Test functionality locally before committing
+5. Focus on one atomic deliverable per task
+6. Update CLAUDE.md with new commands as they become available
+7. **MANDATORY**: Mark task as [DONE] in docs/taskManagement.md when completed
+8. **MANDATORY**: Update docs/taskManagement.md task status BEFORE making git commits
+9. Each task should be completable in a single Claude Code session
+10. Git commit messages should follow the format: "#XXX [DONE] Brief description"
+11. **MANDATORY**: After every commit, ALWAYS ask user for permission to push to GitHub before proceeding
 
 ## Git Commit Format
+
 ```
 #001 [DONE] Setup project structure and environment configuration
 
@@ -562,7 +591,9 @@ When implementing tasks:
 ```
 
 ## Task Status Update Requirements
+
 **CRITICAL**: When completing a task, you MUST:
+
 1. Update the task status from [INPROG] to [DONE] in docs/taskManagement.md
 2. Ensure the update is made BEFORE creating git commits
 3. Use git commit messages that include the task ID and status
@@ -572,7 +603,9 @@ When implementing tasks:
    - Commit: `git commit -m "#001 [DONE] Setup project structure and dependencies"`
 
 # quick-start-guide
+
 For new Claude Code sessions:
+
 1. **Current Phase**: Planning & Architecture Complete
 2. **Next Task**: Check docs/taskManagement.md for current task status
 3. **Priority**: Backend foundation (MCP server) before frontend
@@ -581,7 +614,9 @@ For new Claude Code sessions:
 6. **Status Management**: Update task status in docs/taskManagement.md when starting/completing tasks
 
 # environment-security-checklist
+
 ## Before Starting Development
+
 - [ ] Install NVM and use correct Node version (`nvm use`)
 - [ ] Copy .env.example to .env for both backend and frontend
 - [ ] Generate secure API keys (minimum 32 characters)
@@ -590,6 +625,7 @@ For new Claude Code sessions:
 - [ ] Never commit actual .env files to version control
 
 ## API Key Generation
+
 ```bash
 # Generate secure API key
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -599,13 +635,16 @@ openssl rand -hex 32
 ```
 
 ## Environment File Security
+
 1. **Development**: Use .env files (gitignored)
 2. **Production**: Use AWS Secrets Manager or environment variables
 3. **Never**: Hardcode secrets in source code
 4. **Always**: Use .env.example templates for team sharing
 
 # context-for-claude
+
 This is a medical decision support system that:
+
 - Parses clinical notes to extract patient data
 - Calculates medication doses based on weight and condition
 - Generates treatment plans following clinical guidelines
