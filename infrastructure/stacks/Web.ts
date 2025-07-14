@@ -1,6 +1,5 @@
 import { StackContext, StaticSite, use } from "sst/constructs";
 import { ViewerProtocolPolicy, PriceClass } from "aws-cdk-lib/aws-cloudfront";
-import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { API } from "./API";
 
 export function Web({ stack }: StackContext) {
@@ -17,7 +16,7 @@ export function Web({ stack }: StackContext) {
       VITE_APP_VERSION: "1.0.0",
       VITE_ENVIRONMENT: stack.stage,
     },
-    // CloudFront distribution configuration
+    // CloudFront distribution configuration - custom domains handled via CDK overrides
     cdk: {
       distribution: {
         defaultBehavior: {
@@ -34,9 +33,22 @@ export function Web({ stack }: StackContext) {
     // Custom domain configuration for production
     // Note: Using Cloudflare for DNS, SSL cert must be in us-east-1 for CloudFront
     // Infrastructure in eu-west-2 (London), but CloudFront is global
-    // Custom domain configuration for production - disabled for now as we use Cloudflare
-    // customDomain: stack.stage === "prod" ? "heidimcp.uk" : undefined,
+    // No SST customDomain - we'll configure CloudFront directly for Cloudflare DNS
   });
+
+  // Configure custom domains for production using CDK override (bypasses SST's Route 53 requirement)
+  if (stack.stage === "prod" && site.cdk?.distribution) {
+    const cfnDistribution = site.cdk.distribution.node.defaultChild as any;
+    cfnDistribution.addPropertyOverride("DistributionConfig.Aliases", [
+      "heidimcp.uk",
+      "www.heidimcp.uk"
+    ]);
+    cfnDistribution.addPropertyOverride("DistributionConfig.ViewerCertificate", {
+      AcmCertificateArn: "arn:aws:acm:us-east-1:146409062658:certificate/fdc74de3-d68d-422f-9f07-74527254e98d",
+      SslSupportMethod: "sni-only",
+      MinimumProtocolVersion: "TLSv1.2_2021"
+    });
+  }
 
   stack.addOutputs({
     SiteUrl: site.url,

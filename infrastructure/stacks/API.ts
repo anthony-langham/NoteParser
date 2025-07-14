@@ -30,7 +30,7 @@ export function API({ stack }: StackContext) {
         ],
       },
     },
-    // Custom domain configuration for production - disabled for now as we use Cloudflare
+    // Custom domain disabled - using Cloudflare DNS, will point to API Gateway URL directly
     // customDomain: stack.stage === "prod" ? "api.heidimcp.uk" : undefined,
     cors: {
       allowCredentials: false,
