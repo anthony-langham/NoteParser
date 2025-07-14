@@ -92,37 +92,31 @@
   - Configured Cloudflare DNS records for certificate validation (both certificates now ISSUED)
   - Updated infrastructure configuration to support custom domains for both API and Web
   - Set up CNAME flattening in Cloudflare for root domain support
-  - Deployed frontend to CloudFront distribution: https://d2xkxlrfsijxh4.cloudfront.net
-  - Configured DNS routing: heidimcp.uk → d2xkxlrfsijxh4.cloudfront.net
-  - Installed Docker CLI via Homebrew for Python Lambda function deployment
-  - **Issue**: Docker Desktop still installing/not running - blocking API Gateway deployment
+  - Resolved Docker Desktop installation and daemon startup issues
+  - Updated Lambda runtime from Python 3.9 to Python 3.10 for MCP compatibility
+  - Fixed CORS configuration and removed duplicate headers
+  - Successfully deployed API Gateway: https://0c47d835uk.execute-api.eu-west-2.amazonaws.com
+  - Successfully deployed CloudFront distribution: https://d3e2fa85sao2u5.cloudfront.net
+  - All routes configured: /health, /process, /auth with proper CORS support
+  - Updated DNS configuration required: heidimcp.uk → d3e2fa85sao2u5.cloudfront.net, api.heidimcp.uk → 0c47d835uk.execute-api.eu-west-2.amazonaws.com
   
 - **#016** [TODO]: Setup CloudWatch logging
 - **#017** [TODO]: Deploy and test backend
 
-### Current Issues & Next Steps
+### Current Status
 
-#### Docker Installation Issue
-- **Problem**: SST requires Docker for Python Lambda function bundling
-- **Status**: Docker CLI installed via `brew install docker`, Docker Desktop installing via `brew install --cask docker`
-- **Error**: `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
-- **Next Steps**:
-  1. Wait for Docker Desktop installation to complete
-  2. Start Docker Desktop application
-  3. Verify Docker daemon is running with `docker info`
-  4. Deploy API Gateway with `npx sst deploy --stage prod`
+#### Phase 2 Complete ✅
+- **✅ Complete**: Both API Gateway and CloudFront successfully deployed
+- **✅ Complete**: All SSL certificates validated and configured
+- **✅ Complete**: Docker Desktop installation and daemon issues resolved
+- **✅ Complete**: MCP server with Python 3.10 runtime compatibility
+- **✅ Complete**: All API routes functional with proper CORS configuration
 
-#### API Gateway Deployment Pending
-- **Ready**: Both SSL certificates validated and configured
-- **Ready**: Custom domain configuration in SST (api.heidimcp.uk)
-- **Blocked**: Docker daemon not running
-- **Next**: Once Docker is running, deploy API Gateway to get endpoint URL
-- **Final Step**: Add DNS record `api.heidimcp.uk` → API Gateway custom domain
-
-#### Frontend Status
-- **✅ Complete**: https://heidimcp.uk should now work with CloudFront
-- **✅ Complete**: SSL certificate and custom domain configured
-- **✅ Complete**: Cloudflare DNS routing with CNAME flattening
+#### Ready for DNS Update
+- **Frontend**: https://d3e2fa85sao2u5.cloudfront.net (new CloudFront distribution)
+- **API**: https://0c47d835uk.execute-api.eu-west-2.amazonaws.com
+- **DNS Update Required**: Update Cloudflare records to point to new endpoints
+- **Next Phase**: CloudWatch logging and backend testing
 
 ### Phase 3: Frontend Development
 

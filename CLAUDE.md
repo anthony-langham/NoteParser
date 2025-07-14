@@ -60,7 +60,7 @@ This file contains configuration and context for Claude Code to help with develo
 - ✅ **#014**: CloudFront CDN configured with HTTPS redirect, compression, and optimized caching
 
 ### Current Priority
-- **#015**: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
+- **#015**: ✅ Configure custom domain (heidimcp.uk) and SSL with Cloudflare
 - **#016**: Setup CloudWatch logging
 - **#017**: Deploy and test backend infrastructure
 
