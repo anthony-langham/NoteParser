@@ -47,7 +47,8 @@ This file contains configuration and context for Claude Code to help with develo
 
 - **Phase**: Planning & Architecture Complete
 - **Tech Stack**: React + Vite + shadcn/ui → AWS SST + Lambda → Python MCP Server → JSON files
-- **Data Storage**: JSON files (conditions.json, medications.json, guidelines.json)
+- **Data Storage**: JSON files (conditions.json with embedded medications, guidelines.json)
+- **Data Structure**: Conditions contain embedded medication dosing for streamlined clinical workflow
 - **Deployment**: AWS SST (Serverless Stack) with CloudFront CDN
 - **Domain**: heidimcp.uk (Cloudflare hosted)
 - **Authentication**: Simple API key (MVP), upgrade to AWS Cognito later
@@ -70,6 +71,72 @@ Jack presents with classic features of moderate croup (laryngotracheobronchitis)
 Plan:
 - Administer corticosteroids
 - Plan as per local guidelines for croup
+```
+
+## Data Structure
+
+### conditions.json Schema
+```json
+{
+  "condition_id": {
+    "name": "Human-readable condition name",
+    "description": "Clinical description",
+    "icd_codes": ["ICD-10 codes"],
+    "age_groups": ["pediatric", "adult"],
+    "symptoms": {
+      "primary": ["key symptoms"],
+      "secondary": ["additional symptoms"]
+    },
+    "severity_scales": {
+      "mild": "criteria",
+      "moderate": "criteria", 
+      "severe": "criteria"
+    },
+    "medications": {
+      "first_line": {
+        "medication_name": {
+          "dose_mg_per_kg": 0.0,
+          "max_dose_mg": 0,
+          "min_dose_mg": 0,
+          "route": "oral|iv|im",
+          "frequency": "daily|bid|tid",
+          "duration": "days",
+          "age_restrictions": "constraints",
+          "contraindications": ["conditions"]
+        }
+      },
+      "second_line": { "...": "..." }
+    },
+    "clinical_pearls": ["key points"],
+    "red_flags": ["concerning symptoms"]
+  }
+}
+```
+
+### guidelines.json Schema
+```json
+{
+  "guideline_id": {
+    "name": "Guideline name",
+    "version": "1.0",
+    "last_updated": "YYYY-MM-DD",
+    "source": "Medical organization",
+    "conditions": ["condition_ids"],
+    "decision_tree": {
+      "assessment": {
+        "severity_assessment": "steps",
+        "age_considerations": "factors"
+      },
+      "treatment_algorithm": {
+        "mild": "treatment_plan",
+        "moderate": "treatment_plan",
+        "severe": "treatment_plan"
+      }
+    },
+    "monitoring": "post-treatment monitoring",
+    "follow_up": "follow-up instructions"
+  }
+}
 ```
 
 ## Project Structure
@@ -99,7 +166,8 @@ heidi/
 ├── docs/
 │   ├── Overview.md          # Deployment overview
 │   ├── MCP_Implementation_Guide.md  # MCP server guide
-│   └── Planning.md          # Development planning
+│   ├── Planning.md          # Development planning
+│   └── taskManagement.md    # Task tracking and management
 ├── README.md
 ├── LICENSE
 └── CLAUDE.md                # This file
@@ -233,7 +301,6 @@ uvicorn>=0.24.0
 # Data Configuration
 DATA_PATH=/opt/data/
 CONDITIONS_FILE=conditions.json
-MEDICATIONS_FILE=medications.json
 GUIDELINES_FILE=guidelines.json
 
 # API Configuration
@@ -288,74 +355,7 @@ VITE_ENVIRONMENT=development
 
 ## Development Task Sequence
 
-### Task Status Indicators
-- **[TODO]**: Task not yet started
-- **[INPROG]**: Task currently in progress
-- **[DONE]**: Task completed and committed
-- **[BLOCKED]**: Task blocked by dependencies or issues
-
-### Phase 1: Backend Foundation
-- **#001** [INPROG]: Setup project structure, dependencies, and environment configuration
-- **#002** [TODO]: Create JSON data files (conditions, medications, guidelines)
-- **#003** [TODO]: Implement MCP server basic structure
-- **#004** [TODO]: Build clinical note parser tool
-- **#005** [TODO]: Implement dose calculation tool
-- **#006** [TODO]: Create condition identification tool
-- **#007** [TODO]: Build treatment plan generator
-- **#008** [TODO]: Add comprehensive error handling
-- **#009** [TODO]: Write unit tests for all tools
-- **#010** [TODO]: Setup local development environment
-
-### Phase 2: AWS Infrastructure
-- **#011** [TODO]: Configure SST project structure
-- **#012** [TODO]: Setup Lambda function handlers
-- **#013** [TODO]: Configure API Gateway endpoints
-- **#014** [TODO]: Setup CloudFront CDN
-- **#015** [TODO]: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
-- **#016** [TODO]: Setup CloudWatch logging
-- **#017** [TODO]: Deploy and test backend
-
-### Phase 3: Frontend Development
-- **#018** [TODO]: Initialize React + Vite project
-- **#019** [TODO]: Setup shadcn/ui components
-- **#020** [TODO]: Create clinical note input component
-- **#021** [TODO]: Build treatment plan display
-- **#022** [TODO]: Implement dose calculator interface
-- **#023** [TODO]: Add API integration layer
-- **#024** [TODO]: Implement error handling and loading states
-- **#025** [TODO]: Add responsive design
-- **#026** [TODO]: Deploy frontend to AWS
-
-### Phase 4: Integration & Testing
-- **#027** [TODO]: End-to-end integration testing
-- **#028** [TODO]: Clinical scenario validation
-- **#029** [TODO]: Performance optimization
-- **#030** [TODO]: Create architecture diagram
-- **#031** [TODO]: Record demo video
-- **#032** [TODO]: Final documentation
-
-## Task Guidelines
-
-- Each task should be completable in a single Claude Code session
-- Tasks must be atomic and focused on one specific deliverable
-- Use task IDs (#001, #002, etc.) in all git commits
-- Test locally before committing
-- Each task should include appropriate documentation
-- **Environment Setup**: Always use `nvm use` before starting work
-- **Security**: Never commit .env files or sensitive data
-- **Dependencies**: Use exact Node version specified in .nvmrc
-- **Status Updates**: Update task status in CLAUDE.md when starting/completing tasks
-
-### Task Status Management
-1. **Starting a task**: Change status from [TODO] to [INPROG]
-2. **Completing a task**: Change status from [INPROG] to [DONE]
-3. **Blocking issues**: Change status to [BLOCKED] with reason
-4. **Git commits**: Always include task ID and status (e.g., "#001 [DONE] Setup project structure")
-
-### Example Task Status Flow
-```
-#001 [TODO] → #001 [INPROG] → #001 [DONE]
-```
+See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking and management guidelines.
 
 ## Key Technical Decisions
 
@@ -372,6 +372,13 @@ VITE_ENVIRONMENT=development
 3. **Performance**: Fast file reads from Lambda filesystem
 4. **Cost**: No database costs for MVP
 5. **Development Speed**: Instant data updates without deployment
+
+### Why Embedded Medications in Conditions?
+1. **Clinical Workflow**: Aligns with clinical thinking (condition → treatment)
+2. **Atomic Updates**: Condition and treatment data maintained together
+3. **Reduced Complexity**: No need to manage relationships between separate files
+4. **Faster Lookups**: Single file read instead of multiple joins
+5. **Easier Validation**: Related data validated as a unit
 
 ### Security Considerations
 - No PHI (Personal Health Information) stored in logs
@@ -531,13 +538,15 @@ NEVER proactively create documentation files (*.md) or README files. Only create
 
 # development-workflow
 When implementing tasks:
-1. Update task status to [INPROG] in CLAUDE.md
+1. Update task status to [INPROG] in docs/taskManagement.md when starting a task
 2. Use the task ID (#001, #002, etc.) in git commit messages
 3. Test functionality locally before committing
 4. Focus on one atomic deliverable per task
 5. Update CLAUDE.md with new commands as they become available
-6. Mark task as [DONE] when completed
-7. Each task should be completable in a single Claude Code session
+6. **MANDATORY**: Mark task as [DONE] in docs/taskManagement.md when completed
+7. **MANDATORY**: Update docs/taskManagement.md task status BEFORE making git commits
+8. Each task should be completable in a single Claude Code session
+9. Git commit messages should follow the format: "#XXX [DONE] Brief description"
 
 ## Git Commit Format
 ```
@@ -548,16 +557,27 @@ When implementing tasks:
 - Configured .env.example files
 - Added comprehensive .gitignore
 - Setup requirements.txt for Python dependencies
+- Installed all dependencies (infrastructure, backend, frontend)
 ```
+
+## Task Status Update Requirements
+**CRITICAL**: When completing a task, you MUST:
+1. Update the task status from [INPROG] to [DONE] in docs/taskManagement.md
+2. Ensure the update is made BEFORE creating git commits
+3. Use git commit messages that include the task ID and status
+4. Example workflow:
+   - Start task: Change `#001 [TODO]` to `#001 [INPROG]` in docs/taskManagement.md
+   - Complete task: Change `#001 [INPROG]` to `#001 [DONE]` in docs/taskManagement.md
+   - Commit: `git commit -m "#001 [DONE] Setup project structure and dependencies"`
 
 # quick-start-guide
 For new Claude Code sessions:
 1. **Current Phase**: Planning & Architecture Complete
-2. **Next Task**: #001 [TODO] - Setup project structure and dependencies
+2. **Next Task**: Check docs/taskManagement.md for current task status
 3. **Priority**: Backend foundation (MCP server) before frontend
 4. **Key Files**: Review Overview.md and MCP_Implementation_Guide.md
 5. **Sample Data**: Use provided clinical note for Jack T. (croup case)
-6. **Status Management**: Update task status in CLAUDE.md when starting/completing tasks
+6. **Status Management**: Update task status in docs/taskManagement.md when starting/completing tasks
 
 # environment-security-checklist
 ## Before Starting Development
