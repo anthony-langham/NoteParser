@@ -1,0 +1,176 @@
+{
+  "pediatric_croup_management": {
+    "name": "Pediatric Croup Management Protocol",
+    "version": "1.0",
+    "last_updated": "2024-07-14",
+    "source": "Based on NICE Guidelines, AAP Guidelines, and clinical best practice",
+    "conditions": ["croup"],
+    "decision_tree": {
+      "initial_assessment": {
+        "history": [
+          "Duration and onset of symptoms",
+          "Previous episodes of croup",
+          "Fever pattern and height",
+          "Feeding and fluid intake",
+          "Vaccination status",
+          "Recent upper respiratory illness"
+        ],
+        "physical_examination": [
+          "Respiratory rate and effort",
+          "Presence and quality of stridor",
+          "Chest wall retractions",
+          "Air entry on auscultation",
+          "Oxygen saturation",
+          "Level of consciousness and agitation",
+          "Signs of dehydration"
+        ],
+        "severity_assessment": {
+          "mild": {
+            "management": "supportive_care",
+            "disposition": "home",
+            "follow_up": "routine"
+          },
+          "moderate": {
+            "management": "corticosteroids",
+            "disposition": "observe_then_home",
+            "follow_up": "24-48_hours"
+          },
+          "severe": {
+            "management": "corticosteroids_plus_nebulized_adrenaline",
+            "disposition": "admit_or_extended_observation",
+            "follow_up": "inpatient"
+          }
+        }
+      },
+      "treatment_algorithm": {
+        "mild": {
+          "immediate_actions": [
+            "Reassure child and parents",
+            "Avoid procedures that may agitate child",
+            "Cool mist or humidified air",
+            "Adequate hydration"
+          ],
+          "medications": "none_required",
+          "monitoring": "symptom_progression",
+          "discharge_criteria": "stable_symptoms",
+          "safety_netting": "return_if_worsening"
+        },
+        "moderate": {
+          "immediate_actions": [
+            "Minimize distress and agitation",
+            "Position child comfortably (usually upright)",
+            "Continuous monitoring"
+          ],
+          "medications": {
+            "first_choice": "dexamethasone_0.15mg_per_kg_oral",
+            "alternative": "prednisolone_1mg_per_kg_oral"
+          },
+          "monitoring": {
+            "duration": "2-4_hours_post_steroid",
+            "parameters": [
+              "respiratory_rate",
+              "stridor_intensity",
+              "chest_retractions",
+              "oxygen_saturation",
+              "level_of_consciousness"
+            ]
+          },
+          "discharge_criteria": [
+            "improved_stridor",
+            "reduced_retractions",
+            "stable_oxygen_saturation",
+            "child_comfortable_and_feeding"
+          ],
+          "safety_netting": "detailed_advice_sheet"
+        },
+        "severe": {
+          "immediate_actions": [
+            "Call for senior help",
+            "Prepare for potential airway intervention",
+            "High-flow oxygen if indicated",
+            "Avoid agitation at all costs"
+          ],
+          "medications": {
+            "steroids": "dexamethasone_0.15mg_per_kg_oral_or_iv",
+            "nebulized_treatment": "adrenaline_5ml_1:1000_nebulized"
+          },
+          "monitoring": {
+            "location": "high_dependency_area",
+            "frequency": "continuous",
+            "parameters": [
+              "respiratory_rate",
+              "oxygen_saturation",
+              "blood_pressure",
+              "heart_rate",
+              "level_of_consciousness"
+            ]
+          },
+          "admission_criteria": [
+            "persistent_severe_symptoms",
+            "recurrent_need_for_nebulized_adrenaline",
+            "social_concerns",
+            "distance_from_hospital"
+          ]
+        }
+      }
+    },
+    "monitoring": {
+      "post_treatment": {
+        "steroid_response": "assess_at_2_hours",
+        "adrenaline_response": "assess_at_1_hour",
+        "rebound_symptoms": "monitor_for_4_hours_post_adrenaline"
+      },
+      "deterioration_signs": [
+        "increasing_stridor",
+        "worsening_retractions",
+        "decreasing_oxygen_saturation",
+        "altered_consciousness",
+        "cyanosis"
+      ]
+    },
+    "follow_up": {
+      "mild_cases": "routine_follow_up_with_gp",
+      "moderate_cases": "review_24_48_hours",
+      "severe_cases": "inpatient_monitoring",
+      "parent_education": [
+        "recognition_of_deterioration",
+        "when_to_seek_immediate_help",
+        "supportive_care_at_home",
+        "expected_duration_of_illness"
+      ]
+    },
+    "special_considerations": {
+      "recurrent_croup": {
+        "definition": "3_or_more_episodes",
+        "investigations": "consider_anatomical_abnormalities",
+        "referral": "ent_or_respiratory_paediatrics"
+      },
+      "atypical_presentation": {
+        "high_fever_with_toxicity": "consider_bacterial_tracheitis",
+        "drooling_and_difficulty_swallowing": "consider_epiglottitis",
+        "unilateral_symptoms": "consider_foreign_body"
+      },
+      "comorbidities": {
+        "premature_infants": "lower_threshold_for_admission",
+        "chronic_lung_disease": "may_require_prolonged_monitoring",
+        "immunocompromised": "consider_atypical_pathogens"
+      }
+    },
+    "contraindications_and_precautions": {
+      "avoid_examination_if": [
+        "severe_respiratory_distress",
+        "suspected_epiglottitis",
+        "child_extremely_agitated"
+      ],
+      "steroid_contraindications": [
+        "active_bacterial_infection",
+        "immunocompromised_state",
+        "known_hypersensitivity"
+      ],
+      "adrenaline_contraindications": [
+        "severe_cardiac_disease",
+        "severe_hypertension"
+      ]
+    }
+  }
+}

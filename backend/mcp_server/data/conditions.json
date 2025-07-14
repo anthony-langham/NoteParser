@@ -1,0 +1,122 @@
+{
+  "croup": {
+    "name": "Croup (Laryngotracheobronchitis)",
+    "description": "Viral infection causing inflammation of the larynx and upper airway, typically in children aged 6 months to 6 years",
+    "icd_codes": ["J05.0", "J04.0"],
+    "age_groups": ["pediatric"],
+    "symptoms": {
+      "primary": [
+        "barky cough",
+        "hoarse voice",
+        "inspiratory stridor",
+        "fever"
+      ],
+      "secondary": [
+        "rhinorrhea",
+        "sore throat",
+        "increased work of breathing",
+        "restlessness",
+        "cyanosis"
+      ]
+    },
+    "severity_scales": {
+      "mild": {
+        "criteria": "Occasional barky cough, no stridor at rest, no/minimal chest wall retractions",
+        "stridor": "none at rest",
+        "retractions": "none or minimal",
+        "air_entry": "normal",
+        "cyanosis": "none",
+        "level_of_consciousness": "normal"
+      },
+      "moderate": {
+        "criteria": "Frequent barky cough, audible stridor at rest, visible chest wall retractions",
+        "stridor": "audible at rest",
+        "retractions": "visible suprasternal/intercostal",
+        "air_entry": "decreased",
+        "cyanosis": "none",
+        "level_of_consciousness": "normal but may be restless"
+      },
+      "severe": {
+        "criteria": "Frequent barky cough, prominent inspiratory stridor, marked chest wall retractions, agitation",
+        "stridor": "prominent at rest",
+        "retractions": "marked suprasternal, intercostal, subcostal",
+        "air_entry": "markedly decreased",
+        "cyanosis": "may be present",
+        "level_of_consciousness": "agitated or lethargic"
+      }
+    },
+    "medications": {
+      "first_line": {
+        "dexamethasone": {
+          "dose_mg_per_kg": 0.15,
+          "max_dose_mg": 10,
+          "min_dose_mg": 0.6,
+          "route": "oral",
+          "frequency": "single dose",
+          "duration": "1 day",
+          "age_restrictions": "≥6 months",
+          "contraindications": [
+            "known hypersensitivity",
+            "active bacterial infection",
+            "immunocompromised state"
+          ],
+          "clinical_notes": "Preferred first-line treatment. Single dose usually sufficient."
+        },
+        "prednisolone": {
+          "dose_mg_per_kg": 1.0,
+          "max_dose_mg": 30,
+          "min_dose_mg": 5,
+          "route": "oral",
+          "frequency": "daily",
+          "duration": "3-5 days",
+          "age_restrictions": "≥6 months",
+          "contraindications": [
+            "known hypersensitivity",
+            "active bacterial infection",
+            "immunocompromised state"
+          ],
+          "clinical_notes": "Alternative to dexamethasone. Longer course required."
+        }
+      },
+      "second_line": {
+        "nebulized_adrenaline": {
+          "dose_per_kg": "not weight-based",
+          "standard_dose": "5ml of 1:1000 adrenaline",
+          "route": "nebulized",
+          "frequency": "every 1-4 hours as needed",
+          "duration": "until improvement",
+          "age_restrictions": "all ages",
+          "contraindications": [
+            "severe cardiac disease",
+            "severe hypertension"
+          ],
+          "clinical_notes": "Reserved for moderate to severe croup. Temporary effect. Monitor for rebound symptoms."
+        }
+      }
+    },
+    "clinical_pearls": [
+      "Peak incidence in autumn and winter months",
+      "Most commonly caused by parainfluenza virus",
+      "Symptoms often worse at night",
+      "Cool mist or humidified air may provide comfort",
+      "Avoid agitating the child during assessment",
+      "Consider bacterial tracheitis if high fever and toxic appearance"
+    ],
+    "red_flags": [
+      "Drooling or difficulty swallowing",
+      "High fever (>39°C) with toxic appearance",
+      "Rapid deterioration",
+      "Cyanosis",
+      "Severe respiratory distress",
+      "Inability to cry or speak",
+      "Tripod positioning"
+    ],
+    "differential_diagnosis": [
+      "Epiglottitis",
+      "Bacterial tracheitis",
+      "Foreign body aspiration",
+      "Retropharyngeal abscess",
+      "Angioedema"
+    ]
+  }
+}
