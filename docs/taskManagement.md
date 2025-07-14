@@ -100,7 +100,15 @@
   - All routes configured: /health, /process, /auth with proper CORS support
   - Updated DNS configuration required: heidimcp.uk → d3e2fa85sao2u5.cloudfront.net, api.heidimcp.uk → 0c47d835uk.execute-api.eu-west-2.amazonaws.com
   
-- **#016** [TODO]: Setup CloudWatch logging
+- **#016** [DONE]: Setup CloudWatch logging
+  - API Gateway access logging already configured with structured JSON format
+  - Log group `/aws/vendedlogs/apis/prod-heidi-api-0c47d835uk/default` capturing all API requests
+  - Lambda function log groups exist for all functions with automatic retention
+  - Enhanced SST configuration with CloudWatch log group definitions
+  - Created additional API Gateway log group `/aws/apigateway/heidi-prod` with 7-day retention
+  - Verified logging functionality with test API calls and log event inspection
+  - Access logs include request time, method, path, status, latency, and user agent
+  - Lambda logs showing runtime errors that need to be addressed in next task
 - **#017** [TODO]: Deploy and test backend
 
 ### Current Status
