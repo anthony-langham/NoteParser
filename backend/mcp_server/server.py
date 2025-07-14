@@ -154,40 +154,26 @@ async def generate_treatment_plan(
     patient_data: Dict[str, Any], 
     calculated_doses: List[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
-    """Generate comprehensive treatment plan."""
+    """Generate comprehensive treatment plan using enhanced planner."""
+    from .tools.treatment_planner import generate_comprehensive_treatment_plan
+    
+    # Convert condition name to condition_id if needed
     conditions = load_json_data(CONDITIONS_FILE)
-    guidelines = load_json_data(GUIDELINES_FILE)
+    condition_id = condition
     
-    if not conditions:
-        return {"error": "Conditions data not available"}
+    # Find condition ID from name if needed
+    if condition_id not in conditions:
+        for cond_id, cond_data in conditions.items():
+            if cond_data.get('name', '').lower() == condition.lower():
+                condition_id = cond_id
+                break
     
-    # Find condition
-    condition_data = None
-    for cond_id, cond_data in conditions.items():
-        if cond_id == condition or cond_data.get('name', '').lower() == condition.lower():
-            condition_data = cond_data
-            break
+    result = await generate_comprehensive_treatment_plan(condition_id, severity, patient_data, calculated_doses)
     
-    if not condition_data:
-        return {"error": f"Condition '{condition}' not found"}
-    
-    # Generate treatment plan
-    plan = {
-        "condition": condition_data.get('name', condition),
-        "severity": severity,
-        "patient_summary": {
-            "age": patient_data.get('patient_data', {}).get('age'),
-            "weight": patient_data.get('patient_data', {}).get('weight'),
-            "symptoms": patient_data.get('symptoms', [])
-        },
-        "medications": calculated_doses or [],
-        "monitoring": [],
-        "follow_up": [],
-        "red_flags": condition_data.get('red_flags', []),
-        "clinical_pearls": condition_data.get('clinical_pearls', [])
-    }
-    
-    return plan
+    if result.get('success'):
+        return result['treatment_plan']
+    else:
+        return {"error": result.get('error', 'Failed to generate treatment plan')}
 
 
 @app.list_tools()

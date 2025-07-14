@@ -17,7 +17,7 @@
 - **#004** [DONE]: Build clinical note parser tool
 - **#005** [DONE]: Implement dose calculation tool
 - **#006** [DONE]: Create condition identification tool
-- **#007** [TODO]: Build treatment plan generator
+- **#007** [DONE]: Build treatment plan generator
 - **#008** [TODO]: Add comprehensive error handling
 - **#009** [TODO]: Write unit tests for all tools
 - **#010** [TODO]: Setup local development environment
