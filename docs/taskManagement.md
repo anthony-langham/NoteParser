@@ -90,18 +90,15 @@
   - Updated SST configuration to use eu-west-2 (London) region for main infrastructure
   - Successfully deployed CloudFront distribution with validated SSL certificate
   - Configured Cloudflare DNS records for certificate validation (both certificates now ISSUED)
+  - Updated infrastructure configuration to support custom domains for both API and Web
+  - Set up CNAME flattening in Cloudflare for root domain support
   - Resolved Docker Desktop installation and daemon startup issues
   - Updated Lambda runtime from Python 3.9 to Python 3.10 for MCP compatibility
   - Fixed CORS configuration and removed duplicate headers
   - Successfully deployed API Gateway: https://0c47d835uk.execute-api.eu-west-2.amazonaws.com
-  - Successfully deployed CloudFront distribution with custom domain support
-  - **BREAKTHROUGH**: Solved SST + Cloudflare DNS integration without Route 53
-  - Used CDK property overrides to bypass SST's customDomain Route 53 requirement
-  - Configured CloudFront to accept heidimcp.uk and www.heidimcp.uk using correct SSL certificate ARN
-  - Updated Cloudflare DNS records to point to CloudFront distribution
-  - **✅ FULLY WORKING**: https://heidimcp.uk and https://www.heidimcp.uk now functional
-  - Created comprehensive sst_instructions.md guide for future projects
+  - Successfully deployed CloudFront distribution: https://d3e2fa85sao2u5.cloudfront.net
   - All routes configured: /health, /process, /auth with proper CORS support
+  - Updated DNS configuration required: heidimcp.uk → d3e2fa85sao2u5.cloudfront.net, api.heidimcp.uk → 0c47d835uk.execute-api.eu-west-2.amazonaws.com
   
 - **#016** [TODO]: Setup CloudWatch logging
 - **#017** [TODO]: Deploy and test backend
