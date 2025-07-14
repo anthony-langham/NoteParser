@@ -94,9 +94,35 @@
   - Set up CNAME flattening in Cloudflare for root domain support
   - Deployed frontend to CloudFront distribution: https://d2xkxlrfsijxh4.cloudfront.net
   - Configured DNS routing: heidimcp.uk → d2xkxlrfsijxh4.cloudfront.net
-  - Installed Docker for Python Lambda function deployment (API Gateway pending)
+  - Installed Docker CLI via Homebrew for Python Lambda function deployment
+  - **Issue**: Docker Desktop still installing/not running - blocking API Gateway deployment
+  
 - **#016** [TODO]: Setup CloudWatch logging
 - **#017** [TODO]: Deploy and test backend
+
+### Current Issues & Next Steps
+
+#### Docker Installation Issue
+- **Problem**: SST requires Docker for Python Lambda function bundling
+- **Status**: Docker CLI installed via `brew install docker`, Docker Desktop installing via `brew install --cask docker`
+- **Error**: `Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?`
+- **Next Steps**:
+  1. Wait for Docker Desktop installation to complete
+  2. Start Docker Desktop application
+  3. Verify Docker daemon is running with `docker info`
+  4. Deploy API Gateway with `npx sst deploy --stage prod`
+
+#### API Gateway Deployment Pending
+- **Ready**: Both SSL certificates validated and configured
+- **Ready**: Custom domain configuration in SST (api.heidimcp.uk)
+- **Blocked**: Docker daemon not running
+- **Next**: Once Docker is running, deploy API Gateway to get endpoint URL
+- **Final Step**: Add DNS record `api.heidimcp.uk` → API Gateway custom domain
+
+#### Frontend Status
+- **✅ Complete**: https://heidimcp.uk should now work with CloudFront
+- **✅ Complete**: SSL certificate and custom domain configured
+- **✅ Complete**: Cloudflare DNS routing with CNAME flattening
 
 ### Phase 3: Frontend Development
 
