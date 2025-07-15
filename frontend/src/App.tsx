@@ -52,11 +52,13 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Heidi Clinical Decision Support</h1>
-          <p className="text-muted-foreground">
+    <div className="min-h-screen bg-background p-3 sm:p-6 lg:p-8">
+      <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
+        <div className="text-center space-y-2 px-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
+            Heidi Clinical Decision Support
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
             Evidence-based treatment recommendations powered by MCP
           </p>
         </div>

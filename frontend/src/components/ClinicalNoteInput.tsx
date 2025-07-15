@@ -58,14 +58,14 @@ Plan:
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Clinical Note Input</CardTitle>
-        <CardDescription>
+      <CardHeader className="pb-4 sm:pb-6">
+        <CardTitle className="text-lg sm:text-xl">Clinical Note Input</CardTitle>
+        <CardDescription className="text-sm sm:text-base">
           Enter a clinical note to receive evidence-based treatment recommendations and dose calculations
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <CardContent className="px-4 sm:px-6">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div className="space-y-2">
             <Textarea
               placeholder="Enter clinical note here..."
@@ -74,51 +74,62 @@ Plan:
                 setNote(e.target.value)
                 setError('')
               }}
-              className="min-h-[300px] font-mono text-sm"
+              className="min-h-[200px] sm:min-h-[250px] lg:min-h-[300px] font-mono text-sm resize-y"
               disabled={isLoading}
             />
             {error && (
-              <p className="text-sm text-destructive">{error}</p>
+              <div className="bg-destructive/10 border border-destructive/20 rounded-md p-2 sm:p-3">
+                <p className="text-sm text-destructive">{error}</p>
+              </div>
             )}
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
             <Button 
               type="submit" 
               disabled={isLoading || !note.trim()}
-              className="flex-1 sm:flex-none"
+              className="w-full sm:w-auto sm:flex-1 lg:flex-none lg:min-w-[200px]"
             >
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Processing...
+                  <span className="hidden sm:inline">Processing...</span>
+                  <span className="sm:hidden">Processing</span>
                 </>
               ) : (
-                'Process Clinical Note'
+                <>
+                  <span className="hidden sm:inline">Process Clinical Note</span>
+                  <span className="sm:hidden">Process Note</span>
+                </>
               )}
             </Button>
             
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={handleLoadSample}
-              disabled={isLoading}
-            >
-              Load Sample
-            </Button>
-            
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={handleClear}
-              disabled={isLoading}
-            >
-              Clear
-            </Button>
+            <div className="flex flex-row gap-2 sm:gap-3">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={handleLoadSample}
+                disabled={isLoading}
+                className="flex-1 sm:flex-none"
+              >
+                <span className="hidden sm:inline">Load Sample</span>
+                <span className="sm:hidden">Sample</span>
+              </Button>
+              
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={handleClear}
+                disabled={isLoading}
+                className="flex-1 sm:flex-none"
+              >
+                Clear
+              </Button>
+            </div>
           </div>
           
-          <div className="text-xs text-muted-foreground">
-            <p>Note: This tool is for clinical decision support only. All recommendations should be validated by qualified medical professionals.</p>
+          <div className="text-xs sm:text-sm text-muted-foreground bg-muted/30 p-2 sm:p-3 rounded-md">
+            <p><strong>Note:</strong> This tool is for clinical decision support only. All recommendations should be validated by qualified medical professionals.</p>
           </div>
         </form>
       </CardContent>

@@ -108,15 +108,15 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
   }
 
   return (
-    <div className="w-full space-y-6">
+    <div className="w-full space-y-4 sm:space-y-6">
       {/* Header with Success Indicator */}
       <Card className="border-green-200 bg-green-50/50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-green-800">
-            <CheckCircle2 className="h-5 w-5" />
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="flex items-center gap-2 text-green-800 text-base sm:text-lg">
+            <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
             Clinical Analysis Complete
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm sm:text-base">
             Evidence-based treatment recommendations generated successfully
           </CardDescription>
         </CardHeader>
@@ -125,46 +125,46 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
       {/* Patient Information */}
       {patient_data && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <User className="h-5 w-5" />
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <User className="h-4 w-4 sm:h-5 sm:w-5" />
               Patient Information
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <CardContent className="px-4 sm:px-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
               {patient_data.name && (
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">Name</p>
-                <p className="text-sm">{patient_data.name}</p>
-              </div>
-            )}
-            {patient_data.age && (
-              <div className="space-y-1 flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Age</p>
-                  <p className="text-sm">{patient_data.age}</p>
+                <div className="space-y-1">
+                  <p className="text-xs sm:text-sm font-medium text-muted-foreground">Name</p>
+                  <p className="text-sm sm:text-base font-medium">{patient_data.name}</p>
                 </div>
-              </div>
-            )}
-            {patient_data.weight && (
-              <div className="space-y-1 flex items-center gap-2">
-                <Scale className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Weight</p>
-                  <p className="text-sm">{patient_data.weight} kg</p>
+              )}
+              {patient_data.age && (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
+                    <p className="text-xs sm:text-sm font-medium text-muted-foreground">Age</p>
+                  </div>
+                  <p className="text-sm sm:text-base font-medium">{patient_data.age}</p>
                 </div>
-              </div>
-            )}
-            {patient_data.severity && (
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">Severity</p>
-                <Badge className={getSeverityColor(patient_data.severity)}>
-                  {patient_data.severity}
-                </Badge>
-              </div>
-            )}
+              )}
+              {patient_data.weight && (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <Scale className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
+                    <p className="text-xs sm:text-sm font-medium text-muted-foreground">Weight</p>
+                  </div>
+                  <p className="text-sm sm:text-base font-medium">{patient_data.weight} kg</p>
+                </div>
+              )}
+              {patient_data.severity && (
+                <div className="space-y-1">
+                  <p className="text-xs sm:text-sm font-medium text-muted-foreground">Severity</p>
+                  <Badge className={`${getSeverityColor(patient_data.severity)} text-xs sm:text-sm`}>
+                    {patient_data.severity}
+                  </Badge>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -173,29 +173,29 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
       {/* Condition Identification */}
       {condition && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Stethoscope className="h-5 w-5" />
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Stethoscope className="h-4 w-4 sm:h-5 sm:w-5" />
               Condition Identification
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4 px-4 sm:px-6">
             <div className="flex items-center gap-3">
-              <h3 className="text-lg font-semibold">{condition.name}</h3>
+              <h3 className="text-base sm:text-lg font-semibold">{condition.name}</h3>
             </div>
             
             {condition.matched_symptoms.length > 0 && (
-            <div>
-              <p className="text-sm font-medium text-muted-foreground mb-2">Matched Symptoms:</p>
-              <div className="flex flex-wrap gap-2">
-                {condition.matched_symptoms.map((symptom, index) => (
-                  <Badge key={index} variant="secondary" className="text-xs">
-                    {symptom}
-                  </Badge>
-                ))}
+              <div>
+                <p className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">Matched Symptoms:</p>
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  {condition.matched_symptoms.map((symptom, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs break-words">
+                      {symptom}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           </CardContent>
         </Card>
       )}
@@ -203,59 +203,59 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
       {/* Medication Doses */}
       {calculated_doses && calculated_doses.length > 0 && (
         <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Pill className="h-5 w-5" />
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Pill className="h-4 w-4 sm:h-5 sm:w-5" />
               Calculated Medication Doses
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm sm:text-base">
               Weight-based dosing calculations with safety limits
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
+          <CardContent className="px-4 sm:px-6">
+            <div className="space-y-3 sm:space-y-4">
               {calculated_doses.map((dose, index) => (
-                <div key={index} className="border rounded-lg p-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-base">{dose.medication_name || dose.medication}</h4>
+                <div key={index} className="border rounded-lg p-3 sm:p-4 space-y-2 sm:space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <h4 className="font-semibold text-sm sm:text-base break-words">{dose.medication_name || dose.medication}</h4>
                     {dose.success ? (
-                      <CheckCircle2 className="h-5 w-5 text-green-600" />
+                      <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 flex-shrink-0" />
                     ) : (
-                      <AlertTriangle className="h-5 w-5 text-red-600" />
+                      <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-red-600 flex-shrink-0" />
                     )}
                   </div>
                   
                   {dose.success && (
-                    <div className="space-y-3">
+                    <div className="space-y-2 sm:space-y-3">
                       {/* Dosing Calculation */}
                       {dose.dose_per_kg && dose.patient_weight && (
-                        <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                        <div className="bg-blue-50 border border-blue-200 rounded-md p-2 sm:p-3">
                           <div className="text-xs font-medium text-blue-800 mb-1">Weight-Based Calculation</div>
-                          <div className="text-sm text-blue-700">
+                          <div className="text-xs sm:text-sm text-blue-700 break-words">
                             <span className="font-semibold">{dose.dose_per_kg} mg/kg</span> × <span className="font-semibold">{dose.patient_weight} kg</span> = <span className="font-semibold">{dose.calculated_dose} mg</span>
                           </div>
                           {dose.dosing_rationale && (
-                            <div className="text-xs text-blue-600 mt-1">{dose.dosing_rationale}</div>
+                            <div className="text-xs text-blue-600 mt-1 break-words">{dose.dosing_rationale}</div>
                           )}
                         </div>
                       )}
                       
                       {/* Medication Details */}
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-                        <div>
-                          <span className="font-medium text-muted-foreground">Final Dose: </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
+                        <div className="space-y-1">
+                          <span className="font-medium text-muted-foreground block">Final Dose:</span>
                           <span className="font-semibold">{dose.calculated_dose} mg</span>
                         </div>
-                        <div>
-                          <span className="font-medium text-muted-foreground">Route: </span>
+                        <div className="space-y-1">
+                          <span className="font-medium text-muted-foreground block">Route:</span>
                           <span>{dose.route}</span>
                         </div>
-                        <div>
-                          <span className="font-medium text-muted-foreground">Frequency: </span>
+                        <div className="space-y-1">
+                          <span className="font-medium text-muted-foreground block">Frequency:</span>
                           <span>{dose.frequency}</span>
                         </div>
-                        <div>
-                          <span className="font-medium text-muted-foreground">Duration: </span>
+                        <div className="space-y-1">
+                          <span className="font-medium text-muted-foreground block">Duration:</span>
                           <span>{dose.duration}</span>
                         </div>
                       </div>
@@ -277,57 +277,57 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
       {/* Treatment Plan */}
       {treatment_plan && (
         <Card>
-          <CardHeader>
-            <CardTitle>Treatment Plan</CardTitle>
-            <CardDescription>
+          <CardHeader className="pb-4 sm:pb-6">
+            <CardTitle className="text-base sm:text-lg">Treatment Plan</CardTitle>
+            <CardDescription className="text-sm sm:text-base">
               Evidence-based management recommendations
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-3 sm:space-y-4 px-4 sm:px-6">
             {/* Immediate Actions */}
             {treatment_plan.immediate_actions && treatment_plan.immediate_actions.length > 0 && (
               <div>
-                <h4 className="font-semibold mb-2">Immediate Actions</h4>
-                <ul className="space-y-1">
+                <h4 className="font-semibold mb-2 text-sm sm:text-base">Immediate Actions</h4>
+                <ul className="space-y-1.5 sm:space-y-2">
                   {treatment_plan.immediate_actions.map((action, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm">
-                    <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                    {action}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+                    <li key={index} className="flex items-start gap-2 text-xs sm:text-sm">
+                      <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span className="break-words">{action}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {/* Treatment Plan Monitoring */}
             {treatment_plan.monitoring && (
               <div>
-                <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
+                <h4 className="font-semibold mb-2 flex items-center gap-2 text-sm sm:text-base">
+                  <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                   Treatment Monitoring
                 </h4>
                 {typeof treatment_plan.monitoring === 'string' ? (
-                  <p className="text-sm text-muted-foreground">{treatment_plan.monitoring}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground break-words">{treatment_plan.monitoring}</p>
                 ) : (
-                  <div className="space-y-2 text-sm">
+                  <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
                     {treatment_plan.monitoring.frequency && (
-                      <p><span className="font-medium">Frequency:</span> {treatment_plan.monitoring.frequency}</p>
+                      <p className="break-words"><span className="font-medium">Frequency:</span> {treatment_plan.monitoring.frequency}</p>
                     )}
                     {treatment_plan.monitoring.parameters && Array.isArray(treatment_plan.monitoring.parameters) && (
                       <div>
                         <span className="font-medium">Parameters:</span>
-                        <ul className="list-disc list-inside ml-4 space-y-1">
+                        <ul className="list-disc list-inside ml-3 sm:ml-4 space-y-0.5 sm:space-y-1 mt-1">
                           {treatment_plan.monitoring.parameters.map((param: string, idx: number) => (
-                            <li key={idx}>{param}</li>
+                            <li key={idx} className="break-words">{param}</li>
                           ))}
                         </ul>
                       </div>
                     )}
                     {treatment_plan.monitoring.duration && (
-                      <p><span className="font-medium">Duration:</span> {treatment_plan.monitoring.duration}</p>
+                      <p className="break-words"><span className="font-medium">Duration:</span> {treatment_plan.monitoring.duration}</p>
                     )}
                     {treatment_plan.monitoring.location && (
-                      <p><span className="font-medium">Location:</span> {treatment_plan.monitoring.location}</p>
+                      <p className="break-words"><span className="font-medium">Location:</span> {treatment_plan.monitoring.location}</p>
                     )}
                   </div>
                 )}
@@ -337,20 +337,20 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
             {/* Treatment Plan Follow-up */}
             {treatment_plan.follow_up && (
               <div>
-                <h4 className="font-semibold mb-2">Treatment Follow-up</h4>
+                <h4 className="font-semibold mb-2 text-sm sm:text-base">Treatment Follow-up</h4>
                 {typeof treatment_plan.follow_up === 'string' ? (
-                  <p className="text-sm text-muted-foreground">{treatment_plan.follow_up}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground break-words">{treatment_plan.follow_up}</p>
                 ) : (
-                  <div className="space-y-2 text-sm">
+                  <div className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
                     {treatment_plan.follow_up.timeline && (
-                      <p><span className="font-medium">Timeline:</span> {treatment_plan.follow_up.timeline}</p>
+                      <p className="break-words"><span className="font-medium">Timeline:</span> {treatment_plan.follow_up.timeline}</p>
                     )}
                     {treatment_plan.follow_up.instructions && Array.isArray(treatment_plan.follow_up.instructions) && (
                       <div>
                         <span className="font-medium">Instructions:</span>
-                        <ul className="list-disc list-inside ml-4 space-y-1">
+                        <ul className="list-disc list-inside ml-3 sm:ml-4 space-y-0.5 sm:space-y-1 mt-1">
                           {treatment_plan.follow_up.instructions.map((instruction: string, idx: number) => (
-                            <li key={idx}>{instruction}</li>
+                            <li key={idx} className="break-words">{instruction}</li>
                           ))}
                         </ul>
                       </div>
@@ -358,9 +358,9 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
                     {treatment_plan.follow_up.parent_education && Array.isArray(treatment_plan.follow_up.parent_education) && (
                       <div>
                         <span className="font-medium">Parent Education:</span>
-                        <ul className="list-disc list-inside ml-4 space-y-1">
+                        <ul className="list-disc list-inside ml-3 sm:ml-4 space-y-0.5 sm:space-y-1 mt-1">
                           {treatment_plan.follow_up.parent_education.map((education: string, idx: number) => (
-                            <li key={idx}>{education}</li>
+                            <li key={idx} className="break-words">{education}</li>
                           ))}
                         </ul>
                       </div>
@@ -376,12 +376,12 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
 
       {/* Clinical Disclaimer */}
       <Card className="border-amber-200 bg-amber-50/50">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+        <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
+          <div className="flex items-start gap-2 sm:gap-3">
+            <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600 mt-0.5 flex-shrink-0" />
             <div className="space-y-1">
-              <p className="text-sm font-medium text-amber-800">Clinical Decision Support Tool</p>
-              <p className="text-xs text-amber-700">
+              <p className="text-xs sm:text-sm font-medium text-amber-800">Clinical Decision Support Tool</p>
+              <p className="text-xs sm:text-sm text-amber-700 break-words">
                 This tool provides evidence-based recommendations for clinical decision support only. 
                 All calculations and recommendations must be validated by qualified medical professionals. 
                 This system does not replace clinical judgment or medical expertise.
