@@ -412,5 +412,283 @@
       "Pleural effusion",
       "Lung cancer"
     ]
+  },
+  "pneumonia": {
+    "name": "Community-Acquired Pneumonia (CAP)",
+    "description": "Acute infection of the lung parenchyma acquired outside healthcare settings, characterized by inflammation of alveoli and surrounding tissue",
+    "icd_codes": ["J15.9", "J18.9", "J44.0"],
+    "age_groups": ["pediatric", "adult"],
+    "symptoms": {
+      "primary": [
+        "cough",
+        "fever",
+        "dyspnea",
+        "chest pain",
+        "productive sputum"
+      ],
+      "secondary": [
+        "fatigue",
+        "malaise",
+        "night sweats",
+        "loss of appetite",
+        "confusion (elderly)",
+        "tachypnea",
+        "crackles on auscultation"
+      ]
+    },
+    "severity_scales": {
+      "mild": {
+        "criteria": "CURB-65 score 0-1, stable vital signs, able to maintain oral intake",
+        "mental_status": "normal",
+        "respiratory_rate": "<20/min",
+        "blood_pressure": "systolic ≥90 mmHg",
+        "oxygen_saturation": "≥94% on room air",
+        "management": "outpatient treatment"
+      },
+      "moderate": {
+        "criteria": "CURB-65 score 2, or social factors requiring admission",
+        "mental_status": "normal or mild confusion",
+        "respiratory_rate": "20-30/min",
+        "blood_pressure": "systolic ≥90 mmHg",
+        "oxygen_saturation": "90-94% on room air",
+        "management": "inpatient treatment"
+      },
+      "severe": {
+        "criteria": "CURB-65 score 3-5, sepsis, or ICU criteria",
+        "mental_status": "confusion or altered consciousness",
+        "respiratory_rate": ">30/min",
+        "blood_pressure": "systolic <90 mmHg",
+        "oxygen_saturation": "<90% on room air",
+        "management": "ICU consideration"
+      }
+    },
+    "medications": {
+      "first_line": {
+        "amoxicillin": {
+          "dose_mg_per_kg": 25,
+          "max_dose_mg": 1000,
+          "min_dose_mg": 250,
+          "route": "oral",
+          "frequency": "three times daily",
+          "duration": "5-7 days",
+          "age_restrictions": "all ages",
+          "contraindications": [
+            "penicillin allergy",
+            "severe renal impairment"
+          ],
+          "clinical_notes": "First-line for mild CAP without risk factors"
+        },
+        "amoxicillin_clavulanate": {
+          "dose_mg_per_kg": 25,
+          "max_dose_mg": 875,
+          "min_dose_mg": 250,
+          "route": "oral",
+          "frequency": "twice daily",
+          "duration": "5-7 days",
+          "age_restrictions": "all ages",
+          "contraindications": [
+            "penicillin allergy",
+            "severe hepatic impairment"
+          ],
+          "clinical_notes": "For patients with risk factors or recent antibiotic use"
+        }
+      },
+      "second_line": {
+        "clarithromycin": {
+          "dose_mg_per_kg": 7.5,
+          "max_dose_mg": 500,
+          "min_dose_mg": 125,
+          "route": "oral",
+          "frequency": "twice daily",
+          "duration": "5-7 days",
+          "age_restrictions": "≥6 months",
+          "contraindications": [
+            "macrolide allergy",
+            "severe hepatic impairment",
+            "concurrent ergot alkaloids"
+          ],
+          "clinical_notes": "Alternative for penicillin-allergic patients"
+        },
+        "doxycycline": {
+          "dose_mg_per_kg": 2.2,
+          "max_dose_mg": 100,
+          "min_dose_mg": 50,
+          "route": "oral",
+          "frequency": "twice daily",
+          "duration": "7-10 days",
+          "age_restrictions": "≥8 years",
+          "contraindications": [
+            "pregnancy",
+            "breastfeeding",
+            "children <8 years"
+          ],
+          "clinical_notes": "For atypical pneumonia or penicillin allergy in adults"
+        }
+      }
+    },
+    "clinical_pearls": [
+      "CURB-65 score guides severity assessment and treatment location",
+      "Chest X-ray typically shows consolidation",
+      "Blood cultures positive in <10% of outpatients",
+      "Atypical organisms (Mycoplasma, Chlamydia) more common in younger adults",
+      "Pneumococcal vaccination reduces risk"
+    ],
+    "red_flags": [
+      "Respiratory rate >30/min",
+      "Oxygen saturation <90%",
+      "Systolic BP <90 mmHg",
+      "Confusion or altered mental state",
+      "Multilobar involvement on chest X-ray",
+      "Pleural effusion",
+      "Signs of sepsis"
+    ],
+    "differential_diagnosis": [
+      "Bronchitis",
+      "Pulmonary embolism",
+      "Heart failure",
+      "Lung cancer",
+      "Tuberculosis",
+      "COVID-19"
+    ]
+  },
+  "pediatric_gastroenteritis": {
+    "name": "Pediatric Gastroenteritis",
+    "description": "Acute inflammation of the stomach and intestines in children, typically caused by viral or bacterial pathogens, leading to diarrhea and vomiting",
+    "icd_codes": ["K59.1", "A08.4", "A09"],
+    "age_groups": ["pediatric"],
+    "symptoms": {
+      "primary": [
+        "diarrhea",
+        "vomiting",
+        "abdominal pain",
+        "fever",
+        "dehydration"
+      ],
+      "secondary": [
+        "nausea",
+        "loss of appetite",
+        "irritability",
+        "fatigue",
+        "headache",
+        "muscle aches",
+        "bloating"
+      ]
+    },
+    "severity_scales": {
+      "mild": {
+        "criteria": "No or minimal dehydration (<3%), normal activity, able to keep fluids down",
+        "hydration_status": "normal mucous membranes, normal skin turgor, normal urine output",
+        "clinical_signs": "alert, normal vital signs, <5% weight loss",
+        "fluid_losses": "minimal, well-tolerated oral intake",
+        "management": "home management with oral rehydration"
+      },
+      "moderate": {
+        "criteria": "Mild to moderate dehydration (3-9%), reduced activity, some fluid retention",
+        "hydration_status": "slightly dry mucous membranes, decreased skin turgor, reduced urine output",
+        "clinical_signs": "restless/irritable, mild tachycardia, 5-10% weight loss",
+        "fluid_losses": "moderate, struggling with oral intake",
+        "management": "supervised oral rehydration therapy"
+      },
+      "severe": {
+        "criteria": "Severe dehydration (>9%), lethargic, unable to keep fluids down",
+        "hydration_status": "very dry mucous membranes, poor skin turgor, minimal urine output",
+        "clinical_signs": "lethargic/unconscious, tachycardia, hypotension, >10% weight loss",
+        "fluid_losses": "severe, vomiting all oral intake",
+        "management": "hospital admission, IV fluids"
+      }
+    },
+    "medications": {
+      "first_line": {
+        "oral_rehydration_salts": {
+          "dose_mg_per_kg": "not weight-based",
+          "standard_dose": "50-100ml per kg over 4 hours",
+          "max_dose_mg": "unlimited",
+          "min_dose_mg": "as tolerated",
+          "route": "oral",
+          "frequency": "small frequent amounts",
+          "duration": "until rehydrated",
+          "age_restrictions": "all ages",
+          "contraindications": [
+            "severe dehydration requiring IV fluids",
+            "intractable vomiting",
+            "bowel obstruction"
+          ],
+          "clinical_notes": "Gold standard for mild-moderate dehydration. Give 5-10ml every 5-10 minutes."
+        },
+        "ondansetron": {
+          "dose_mg_per_kg": 0.15,
+          "max_dose_mg": 8,
+          "min_dose_mg": 2,
+          "route": "oral",
+          "frequency": "every 8 hours as needed",
+          "duration": "24-48 hours",
+          "age_restrictions": "≥6 months",
+          "contraindications": [
+            "hypersensitivity",
+            "congenital long QT syndrome",
+            "severe hepatic impairment"
+          ],
+          "clinical_notes": "For persistent vomiting interfering with oral rehydration"
+        }
+      },
+      "second_line": {
+        "loperamide": {
+          "dose_mg_per_kg": 0.08,
+          "max_dose_mg": 2,
+          "min_dose_mg": 1,
+          "route": "oral",
+          "frequency": "after each loose stool",
+          "duration": "maximum 2 days",
+          "age_restrictions": "≥2 years",
+          "contraindications": [
+            "bloody diarrhea",
+            "high fever",
+            "severe colitis",
+            "children <2 years"
+          ],
+          "clinical_notes": "Generally not recommended in children. Use only if travel essential."
+        },
+        "probiotic": {
+          "dose_per_kg": "not weight-based",
+          "standard_dose": "1-2 billion CFU daily",
+          "route": "oral",
+          "frequency": "daily",
+          "duration": "5-7 days",
+          "age_restrictions": "≥3 months",
+          "contraindications": [
+            "immunocompromised state",
+            "severe underlying illness",
+            "central venous catheter"
+          ],
+          "clinical_notes": "May reduce duration of symptoms. Lactobacillus rhamnosus GG most studied."
+        }
+      }
+    },
+    "clinical_pearls": [
+      "Most cases are viral and self-limiting (3-7 days)",
+      "Rotavirus most common cause in unvaccinated children",
+      "Avoid anti-diarrheal medications in children <2 years",
+      "BRAT diet (bananas, rice, applesauce, toast) is outdated - normal diet as tolerated",
+      "Zinc supplementation may reduce duration in developing countries"
+    ],
+    "red_flags": [
+      "Signs of severe dehydration (>10% weight loss)",
+      "Bloody diarrhea",
+      "High fever >39°C",
+      "Persistent vomiting unable to keep fluids down",
+      "Altered mental status",
+      "Abdominal distension",
+      "Severe abdominal pain",
+      "Age <3 months with any dehydration"
+    ],
+    "differential_diagnosis": [
+      "Appendicitis",
+      "Intussusception",
+      "Diabetic ketoacidosis",
+      "Urinary tract infection",
+      "Pneumonia",
+      "Meningitis",
+      "Food poisoning"
+    ]
   }
 }

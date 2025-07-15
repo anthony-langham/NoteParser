@@ -314,20 +314,43 @@
   - Added red flags, differential diagnoses, and follow-up protocols for both conditions
   - Validated JSON integrity for both conditions.json and guidelines.json files
   - System now supports adult respiratory emergencies with same comprehensive approach as pediatric cases
-- \*\*#028.5## [TODO]: OpenAI advice
-  - Tighten the JSON Schemas for each tool (units, enums, min/max).
-  - Add at least two more conditions (asthma, pneumonia) with full dosing & guidelines to prove extensibility.
-  - Switch outputs to JsonContent (or wrap in assistant_response JSON) so evaluators can feed them straight back into the model.
-  - Bundle a 20-line agent demo that:
-    • parses a note,
-    • identifies the condition,
-    • calculates dose,
-    • generates plan,
-    • prints the result.
-  - Edge-case tests: negative weight, unknown drug, missing age, etc.
-  - Generate a comprehensive README including a Clinical safety disclaimer in README: “prototype only, not for production use”.
-
-These tweaks are low-effort but show professional polish and a deep grasp of agentic patterns.
+- **#028.5** [DONE]: OpenAI advice - Professional polish and production readiness improvements
+  - **Tightened JSON schemas** for all MCP tools with comprehensive constraints:
+    - Patient weight: 0.5-300 kg with 0.1 kg precision
+    - Patient age: 0-150 years (integer validation)
+    - Severity: enum ["mild", "moderate", "severe", "life-threatening"]
+    - Clinical notes: 10-10,000 character limits
+    - Medication names: pattern validation for known drugs
+    - Symptoms: max 20 items, 1-100 characters each
+  - **Added two comprehensive medical conditions** with full dosing guidelines:
+    - Community-Acquired Pneumonia (CAP): CURB-65 severity scoring, antibiotics (amoxicillin, clarithromycin, doxycycline)
+    - Pediatric Gastroenteritis: dehydration assessment, oral rehydration therapy, ondansetron, probiotics
+    - Both conditions include complete ICD codes, severity scales, medication dosing, contraindications, clinical pearls
+  - **Switched to JsonContent output** for better model integration:
+    - Replaced all TextContent returns with JsonContent for structured responses
+    - Evaluators can now feed responses directly back into models without JSON parsing
+    - Maintained backward compatibility with existing API patterns
+  - **Created 20-line agent demo** (demo_agent.py) showing complete clinical workflow:
+    - Parses Jack T. croup clinical note
+    - Identifies condition with symptoms and assessment
+    - Calculates dexamethasone dose (2.13mg for 14.2kg patient)
+    - Generates comprehensive treatment plan
+    - Prints structured JSON results with error handling
+  - **Added comprehensive edge case tests** (test_edge_cases.py):
+    - Negative weight, zero weight, extremely high/low weights
+    - Unknown medications, unknown conditions, invalid severity levels
+    - Missing age, negative age, extremely high ages
+    - Empty clinical notes, extremely long notes, unicode handling
+    - Boundary value testing (0.5kg, 300kg, 0 years, 150 years)
+    - Performance testing with maximum input sizes
+  - **Generated comprehensive README** with prominent clinical safety disclaimers:
+    - Multiple "PROTOTYPE ONLY - NOT FOR PRODUCTION USE" warnings
+    - Complete API documentation with examples
+    - Installation and development instructions
+    - Security considerations and medical liability disclaimers
+    - Professional contribution guidelines for healthcare professionals
+    - Architecture diagrams and technical decision explanations
+    - FDA approval disclaimers and regulatory compliance notes
 
 - **#029** [TODO]: Performance optimization
 - **#030** [TODO]: Create architecture diagram

@@ -5,7 +5,7 @@ import json
 import logging
 from typing import Dict, Any, List
 from mcp.server import Server
-from mcp.types import Tool, TextContent
+from mcp.types import Tool, TextContent, JsonContent
 from pathlib import Path
 from .utils.error_handler import (
     ErrorHandler, handle_errors, global_error_handler,
@@ -154,10 +154,10 @@ async def calculate_medication_dose(
             details={"medication": medication, "condition": condition}
         ))
     
-    if patient_weight <= 0 or patient_weight > 500:
+    if patient_weight < 0.5 or patient_weight > 300.0:
         raise ValidationError(ErrorDetails(
             code=ErrorCode.INVALID_PATIENT_DATA,
-            message="Patient weight must be between 0.5 and 500 kg",
+            message="Patient weight must be between 0.5 and 300 kg",
             details={"provided_weight": patient_weight}
         ))
     
@@ -244,10 +244,10 @@ async def generate_treatment_plan(
             details={"condition": condition, "severity": severity}
         ))
     
-    if severity not in ['mild', 'moderate', 'severe']:
+    if severity not in ['mild', 'moderate', 'severe', 'life-threatening']:
         raise ValidationError(ErrorDetails(
             code=ErrorCode.INVALID_PATIENT_DATA,
-            message="Severity must be 'mild', 'moderate', or 'severe'",
+            message="Severity must be 'mild', 'moderate', 'severe', or 'life-threatening'",
             details={"provided_severity": severity}
         ))
     
@@ -298,7 +298,12 @@ async def list_tools():
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "clinical_note": {"type": "string", "description": "Raw clinical note text"}
+                    "clinical_note": {
+                        "type": "string", 
+                        "description": "Raw clinical note text containing patient information, symptoms, and assessment",
+                        "minLength": 10,
+                        "maxLength": 10000
+                    }
                 },
                 "required": ["clinical_note"]
             }
@@ -309,9 +314,29 @@ async def list_tools():
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "symptoms": {"type": "array", "items": {"type": "string"}, "description": "List of symptoms"},
-                    "assessment": {"type": "string", "description": "Clinical assessment text"},
-                    "patient_age": {"type": "number", "description": "Patient age in years"}
+                    "symptoms": {
+                        "type": "array", 
+                        "items": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 100
+                        }, 
+                        "description": "List of clinical symptoms (e.g., 'barky cough', 'fever', 'stridor')",
+                        "minItems": 0,
+                        "maxItems": 20
+                    },
+                    "assessment": {
+                        "type": "string", 
+                        "description": "Clinical assessment text containing diagnosis or differential diagnosis",
+                        "minLength": 1,
+                        "maxLength": 1000
+                    },
+                    "patient_age": {
+                        "type": "integer", 
+                        "description": "Patient age in years (0-150)",
+                        "minimum": 0,
+                        "maximum": 150
+                    }
                 },
                 "required": ["symptoms", "assessment"]
             }
@@ -322,10 +347,32 @@ async def list_tools():
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "medication": {"type": "string", "description": "Medication name"},
-                    "condition": {"type": "string", "description": "Medical condition"},
-                    "patient_weight": {"type": "number", "description": "Patient weight in kg"},
-                    "severity": {"type": "string", "description": "Condition severity level"}
+                    "medication": {
+                        "type": "string", 
+                        "description": "Medication name (e.g., 'dexamethasone', 'prednisolone', 'salbutamol')",
+                        "minLength": 1,
+                        "maxLength": 50,
+                        "pattern": "^[a-zA-Z0-9\\s\\-]+$"
+                    },
+                    "condition": {
+                        "type": "string", 
+                        "description": "Medical condition identifier or name",
+                        "minLength": 1,
+                        "maxLength": 100
+                    },
+                    "patient_weight": {
+                        "type": "number", 
+                        "description": "Patient weight in kilograms (0.5-300 kg)",
+                        "minimum": 0.5,
+                        "maximum": 300.0,
+                        "multipleOf": 0.1
+                    },
+                    "severity": {
+                        "type": "string", 
+                        "description": "Condition severity level",
+                        "enum": ["mild", "moderate", "severe", "life-threatening"],
+                        "default": "moderate"
+                    }
                 },
                 "required": ["medication", "condition", "patient_weight"]
             }
@@ -336,10 +383,45 @@ async def list_tools():
             inputSchema={
                 "type": "object",
                 "properties": {
-                    "condition": {"type": "string", "description": "Medical condition"},
-                    "severity": {"type": "string", "description": "Condition severity"},
-                    "patient_data": {"type": "object", "description": "Structured patient data"},
-                    "calculated_doses": {"type": "array", "description": "List of calculated medication doses"}
+                    "condition": {
+                        "type": "string", 
+                        "description": "Medical condition identifier or name",
+                        "minLength": 1,
+                        "maxLength": 100
+                    },
+                    "severity": {
+                        "type": "string", 
+                        "description": "Condition severity level",
+                        "enum": ["mild", "moderate", "severe", "life-threatening"]
+                    },
+                    "patient_data": {
+                        "type": "object", 
+                        "description": "Structured patient data containing demographics and clinical information",
+                        "properties": {
+                            "age": {"type": "integer", "minimum": 0, "maximum": 150},
+                            "weight": {"type": "number", "minimum": 0.5, "maximum": 300.0},
+                            "name": {"type": "string", "minLength": 1, "maxLength": 100},
+                            "symptoms": {"type": "array", "items": {"type": "string"}},
+                            "assessment": {"type": "string", "minLength": 1, "maxLength": 1000}
+                        },
+                        "required": ["age", "weight"],
+                        "additionalProperties": true
+                    },
+                    "calculated_doses": {
+                        "type": "array", 
+                        "description": "List of calculated medication doses with dosing information",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "medication": {"type": "string"},
+                                "final_dose": {"type": "number"},
+                                "unit": {"type": "string"},
+                                "route": {"type": "string"},
+                                "frequency": {"type": "string"}
+                            }
+                        },
+                        "maxItems": 10
+                    }
                 },
                 "required": ["condition", "severity", "patient_data"]
             }
@@ -385,10 +467,10 @@ async def call_tool(name: str, arguments: dict):
                     details={"tool_name": name, "available_tools": ["parse_clinical_note", "identify_condition", "calculate_medication_dose", "generate_treatment_plan"]}
                 ))
             )
-            return [TextContent(type="text", text=json.dumps(error_response, indent=2))]
+            return [JsonContent(json=error_response)]
         
         # Return successful result
-        return [TextContent(type="text", text=json.dumps(result, indent=2))]
+        return [JsonContent(json=result)]
             
     except Exception as e:
         # Handle all errors through the global error handler
@@ -396,7 +478,7 @@ async def call_tool(name: str, arguments: dict):
             "tool_name": name,
             "arguments": arguments
         })
-        return [TextContent(type="text", text=json.dumps(error_response, indent=2))]
+        return [JsonContent(json=error_response)]
 
 
 def main():
