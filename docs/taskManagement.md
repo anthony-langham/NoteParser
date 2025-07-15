@@ -193,7 +193,7 @@
   - Task completed as enhancement rather than separate calculator - more clinically valuable
 - **#023** [DONE]: Add API integration layer
   - **CORS Resolution**:
-    - Fixed API Gateway CORS configuration to use wildcard origin ("*") for development
+    - Fixed API Gateway CORS configuration to use wildcard origin ("\*") for development
     - Added proper preflight OPTIONS handling in Lambda process.py handler
     - Updated all Lambda response headers to include x-api-key in Access-Control-Allow-Headers
     - Successfully deployed API stack with corrected CORS configuration
@@ -261,7 +261,13 @@
     - TypeScript type checking passes without errors
     - Development server running successfully on localhost:4000
     - All responsive breakpoints tested and functional
-- **#026** [TODO]: Deploy frontend to AWS
+- **#026** [DONE]: Deploy frontend to AWS
+  - **CloudFront Conflict Resolution**: Systematically identified and resolved CloudFront function naming conflicts
+  - **Custom Domain Configuration**: Implemented CDK property overrides to bypass Route 53 requirement for Cloudflare DNS
+  - **Infrastructure Deployment**: Successfully deployed new CloudFront distribution with SSL certificate integration
+  - **Production Endpoints**: Frontend deployed to https://d2cciufjms9tmo.cloudfront.net with custom domain https://heidimcp.uk configured
+  - **End-to-End Verification**: Confirmed frontend loads correctly, API integration functional, complete clinical pipeline working
+  - **Documentation**: Created comprehensive SST_Deployment_Guide.md for future reference and troubleshooting
 
 ### Phase 4: Integration & Testing
 
