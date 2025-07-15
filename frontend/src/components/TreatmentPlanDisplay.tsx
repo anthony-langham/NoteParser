@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import { Badge } from './ui/badge'
 import { CheckCircle2, AlertTriangle, User, Scale, Calendar, Pill, Stethoscope, Clock } from 'lucide-react'
+import { ErrorAlert } from './ErrorAlert'
 
 interface PatientData {
   name?: string
@@ -75,19 +76,11 @@ interface TreatmentPlanDisplayProps {
 export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
   if (!data.success) {
     return (
-      <Card className="w-full border-destructive">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-5 w-5" />
-            Processing Error
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            {(data as any).error || 'An error occurred while processing the clinical note.'}
-          </p>
-        </CardContent>
-      </Card>
+      <ErrorAlert 
+        title="Processing Error"
+        message={data.error || 'An error occurred while processing the clinical note.'}
+        className="w-full"
+      />
     )
   }
 
@@ -96,19 +89,11 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
   // Handle cases where data might be undefined
   if (!patient_data && !condition && !calculated_doses && !treatment_plan) {
     return (
-      <Card className="w-full border-destructive">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-destructive">
-            <AlertTriangle className="h-5 w-5" />
-            No Data Available
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            No clinical data was returned from the processing request.
-          </p>
-        </CardContent>
-      </Card>
+      <ErrorAlert 
+        title="No Data Available"
+        message="No clinical data was returned from the processing request."
+        className="w-full"
+      />
     )
   }
 
