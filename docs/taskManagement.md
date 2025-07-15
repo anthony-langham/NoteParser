@@ -352,10 +352,9 @@
     - Architecture diagrams and technical decision explanations
     - FDA approval disclaimers and regulatory compliance notes
 
-- **#029** [TODO]: Performance optimization
-- **#030** [TODO]: Create architecture diagram
-- **#031** [TODO]: Record demo video
-- **#032** [TODO]: Final documentation
+- **#029** [CANCEL]: Performance optimization (MVP doesn't require this optimization)
+- **#030** [INPROG]: Create architecture diagram
+- **#031** [INPROG]: Record demo video
 
 ## Task Guidelines
 
