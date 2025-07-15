@@ -51,6 +51,12 @@ function App() {
     }
   }
 
+  const handleClear = () => {
+    setResult(null)
+    setError(null)
+    setLastNote('')
+  }
+
   return (
     <div className="min-h-screen bg-background p-3 sm:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
@@ -65,6 +71,7 @@ function App() {
         
         <ClinicalNoteInput 
           onSubmit={handleSubmit} 
+          onClear={handleClear}
           isLoading={isProcessing}
         />
         

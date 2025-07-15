@@ -6,10 +6,11 @@ import { Loader2, Shuffle } from 'lucide-react'
 
 interface ClinicalNoteInputProps {
   onSubmit: (note: string) => void
+  onClear?: () => void
   isLoading?: boolean
 }
 
-export function ClinicalNoteInput({ onSubmit, isLoading = false }: ClinicalNoteInputProps) {
+export function ClinicalNoteInput({ onSubmit, onClear, isLoading = false }: ClinicalNoteInputProps) {
   const [note, setNote] = useState('')
   const [error, setError] = useState('')
 
@@ -246,6 +247,9 @@ Plan:
   const handleClear = () => {
     setNote('')
     setError('')
+    if (onClear) {
+      onClear()
+    }
   }
 
   return (

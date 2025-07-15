@@ -356,6 +356,16 @@
 - **#030** [INPROG]: Create architecture diagram
 - **#031** [INPROG]: Record demo video
 
+### Ad-hoc Tasks (Small fixes and improvements)
+
+- **#032** [DONE]: Fix clear button to reset entire UI state
+  - Modified ClinicalNoteInput component to accept onClear prop for parent state management
+  - Updated App.tsx to provide handleClear function that resets result, error, and lastNote state
+  - Clear button now properly removes displayed treatment plans and dosing advice
+  - Maintains existing functionality of clearing text input and validation errors
+  - Fixed issue where treatment plans persisted after clicking clear button
+  - Enables users to get a clean slate for new clinical note processing
+
 ## Task Guidelines
 
 - Before commencing a new task ensure you think really hard about the optimal solution before starting
