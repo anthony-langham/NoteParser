@@ -1,13 +1,5 @@
 # 🩺 Heidi - Clinical Decision Support System
 
-> **🚨 IMPORTANT CLINICAL SAFETY DISCLAIMER**
-> 
-> **THIS IS A PROTOTYPE SYSTEM FOR DEMONSTRATION PURPOSES ONLY**
-> 
-> **NOT FOR PRODUCTION USE OR CLINICAL DECISION MAKING**
-> 
-> This system is not validated for clinical use and should never be used for actual patient care decisions. All clinical decisions must be made by qualified healthcare professionals using established medical protocols and guidelines. This software is provided for educational and demonstration purposes only.
-
 ## Overview
 
 Heidi is an intelligent clinical decision support system that leverages the Model Context Protocol (MCP) to provide structured, auditable clinical recommendations. The system ingests unstructured clinical notes and generates evidence-based treatment plans with precise medication dosing calculations.
@@ -35,10 +27,10 @@ Heidi is an intelligent clinical decision support system that leverages the Mode
 ## Architecture
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+┌──────────────-───┐    ┌─────────────────┐    ┌─────────────────┐
 │   React Frontend │    │   AWS Gateway   │    │   MCP Server    │
 │   (Vite + UI)    │───▶│   (Lambda)      │───▶│   (Python)      │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+└──────────────── ─┘    └─────────────────┘    └─────────────────┘
                                                         │
                                               ┌─────────────────┐
                                               │   JSON Data     │
