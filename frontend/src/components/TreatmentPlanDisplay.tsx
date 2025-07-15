@@ -17,7 +17,8 @@ interface Condition {
 
 interface CalculatedDose {
   success: boolean
-  medication_name: string
+  medication_name?: string
+  medication?: string
   calculated_dose: number
   route: string
   frequency: string
@@ -26,19 +27,32 @@ interface CalculatedDose {
   max_dose?: number
 }
 
+interface MonitoringInfo {
+  frequency?: string
+  parameters?: string[]
+  duration?: string
+  location?: string
+}
+
+interface FollowUpInfo {
+  timeline?: string
+  instructions?: string[]
+  parent_education?: string[]
+}
+
 interface TreatmentPlan {
   condition_name: string
   severity: string
   medications: any[]
   immediate_actions: string[]
-  monitoring: any
-  follow_up: any
+  monitoring: string | MonitoringInfo
+  follow_up: string | FollowUpInfo
 }
 
 interface Recommendations {
   primary_medication?: CalculatedDose
-  monitoring: string
-  follow_up: string
+  monitoring: string | MonitoringInfo
+  follow_up: string | FollowUpInfo
 }
 
 interface TreatmentPlanResponse {
@@ -185,9 +199,6 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
           <CardContent className="space-y-4">
             <div className="flex items-center gap-3">
               <h3 className="text-lg font-semibold">{condition.name}</h3>
-              <Badge className={getConfidenceColor(condition.confidence)}>
-                {Math.round(condition.confidence * 100)}% confidence
-              </Badge>
             </div>
             
             {condition.matched_symptoms.length > 0 && (
@@ -223,7 +234,7 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
               {calculated_doses.map((dose, index) => (
                 <div key={index} className="border rounded-lg p-4 space-y-2">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-semibold text-base">{dose.medication_name}</h4>
+                    <h4 className="font-semibold text-base">{dose.medication_name || dose.medication}</h4>
                     {dose.success ? (
                       <CheckCircle2 className="h-5 w-5 text-green-600" />
                     ) : (
@@ -289,24 +300,77 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
             </div>
           )}
 
-            {/* Monitoring */}
-            {recommendations?.monitoring && (
+            {/* Treatment Plan Monitoring */}
+            {treatment_plan.monitoring && (
               <div>
                 <h4 className="font-semibold mb-2 flex items-center gap-2">
                   <Clock className="h-4 w-4" />
-                  Monitoring
+                  Treatment Monitoring
                 </h4>
-                <p className="text-sm text-muted-foreground">{recommendations.monitoring}</p>
+                {typeof treatment_plan.monitoring === 'string' ? (
+                  <p className="text-sm text-muted-foreground">{treatment_plan.monitoring}</p>
+                ) : (
+                  <div className="space-y-2 text-sm">
+                    {treatment_plan.monitoring.frequency && (
+                      <p><span className="font-medium">Frequency:</span> {treatment_plan.monitoring.frequency}</p>
+                    )}
+                    {treatment_plan.monitoring.parameters && Array.isArray(treatment_plan.monitoring.parameters) && (
+                      <div>
+                        <span className="font-medium">Parameters:</span>
+                        <ul className="list-disc list-inside ml-4 space-y-1">
+                          {treatment_plan.monitoring.parameters.map((param: string, idx: number) => (
+                            <li key={idx}>{param}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {treatment_plan.monitoring.duration && (
+                      <p><span className="font-medium">Duration:</span> {treatment_plan.monitoring.duration}</p>
+                    )}
+                    {treatment_plan.monitoring.location && (
+                      <p><span className="font-medium">Location:</span> {treatment_plan.monitoring.location}</p>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
-            {/* Follow-up */}
-            {recommendations?.follow_up && (
+            {/* Treatment Plan Follow-up */}
+            {treatment_plan.follow_up && (
               <div>
-                <h4 className="font-semibold mb-2">Follow-up</h4>
-                <p className="text-sm text-muted-foreground">{recommendations.follow_up}</p>
+                <h4 className="font-semibold mb-2">Treatment Follow-up</h4>
+                {typeof treatment_plan.follow_up === 'string' ? (
+                  <p className="text-sm text-muted-foreground">{treatment_plan.follow_up}</p>
+                ) : (
+                  <div className="space-y-2 text-sm">
+                    {treatment_plan.follow_up.timeline && (
+                      <p><span className="font-medium">Timeline:</span> {treatment_plan.follow_up.timeline}</p>
+                    )}
+                    {treatment_plan.follow_up.instructions && Array.isArray(treatment_plan.follow_up.instructions) && (
+                      <div>
+                        <span className="font-medium">Instructions:</span>
+                        <ul className="list-disc list-inside ml-4 space-y-1">
+                          {treatment_plan.follow_up.instructions.map((instruction: string, idx: number) => (
+                            <li key={idx}>{instruction}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {treatment_plan.follow_up.parent_education && Array.isArray(treatment_plan.follow_up.parent_education) && (
+                      <div>
+                        <span className="font-medium">Parent Education:</span>
+                        <ul className="list-disc list-inside ml-4 space-y-1">
+                          {treatment_plan.follow_up.parent_education.map((education: string, idx: number) => (
+                            <li key={idx}>{education}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
+
           </CardContent>
         </Card>
       )}

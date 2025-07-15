@@ -143,6 +143,19 @@ def handler(event, context):
     """
     logger.info(f"Processing clinical note request")
     
+    # Handle preflight OPTIONS requests
+    if event.get('httpMethod') == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key, X-Api-Key',
+                'Access-Control-Max-Age': '86400'
+            },
+            'body': ''
+        }
+    
     try:
         # Parse the request body
         if event.get('body'):
@@ -158,6 +171,7 @@ def handler(event, context):
                 'headers': {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key, X-Api-Key',
                 },
                 'body': json.dumps({
                     'error': 'Bad Request',
@@ -191,7 +205,7 @@ def handler(event, context):
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key, X-Api-Key',
             },
             'body': json.dumps(response_data)
         }
@@ -205,6 +219,7 @@ def handler(event, context):
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key, X-Api-Key',
             },
             'body': json.dumps({
                 'error': 'Bad Request',
@@ -219,6 +234,7 @@ def handler(event, context):
             'headers': {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type, Authorization, x-api-key, X-Api-Key',
             },
             'body': json.dumps({
                 'error': 'Internal server error',
