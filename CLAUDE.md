@@ -45,7 +45,7 @@ This file contains configuration and context for Claude Code to help with develo
 
 ## Current Status
 
-- **Phase**: Backend Foundation Complete (Phase 2 in progress)
+- **Phase**: Production Ready (Phase 4 Complete)
 - **Tech Stack**: React + Vite + shadcn/ui → AWS SST + Lambda → Python MCP Server → JSON files
 - **Data Storage**: JSON files (conditions.json with embedded medications, guidelines.json)
 - **Data Structure**: Conditions contain embedded medication dosing for streamlined clinical workflow
@@ -53,18 +53,41 @@ This file contains configuration and context for Claude Code to help with develo
 - **Domain**: heidimcp.uk (Cloudflare hosted)
 - **Authentication**: Simple API key (MVP), upgrade to AWS Cognito later
 - **Cost**: ~$15-35/month for moderate usage
+- **Condition Identification**: Assessment-based diagnosis matching (prioritizes clinical assessment over symptom overlap)
+- **Sample Data**: 12 diverse clinical examples covering all 5 supported conditions
 
-### Completed Tasks (Phase 1 & 2)
+### Completed Tasks (All Phases)
 - ✅ **#001-#012**: Complete backend foundation with MCP server, Lambda handlers, and SST infrastructure
 - ✅ **#013**: API Gateway endpoints configured with authentication, health checks, and main processing
 - ✅ **#014**: CloudFront CDN configured with HTTPS redirect, compression, and optimized caching
+- ✅ **#015**: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
+- ✅ **#016**: Setup CloudWatch logging
+- ✅ **#017**: Deploy and test backend infrastructure
+- ✅ **#018-#026**: Complete frontend development with React, shadcn/ui, responsive design, and AWS deployment
+- ✅ **#027-#028**: End-to-end integration testing with multiple clinical scenarios
+- ✅ **Enhanced Sample Data**: Expanded from 4 to 12 diverse clinical examples across all conditions
+- ✅ **Assessment-Based Diagnosis**: Refactored condition identification to prioritize clinical assessment over symptom matching
 
-### Current Priority
-- **#015**: ✅ Configure custom domain (heidimcp.uk) and SSL with Cloudflare
-- **#016**: Setup CloudWatch logging
-- **#017**: Deploy and test backend infrastructure
+### Production Endpoints
+- **Frontend**: https://heidimcp.uk
+- **API**: https://kolsmzlspg.execute-api.eu-west-2.amazonaws.com
+- **Status**: Fully operational with complete clinical decision support pipeline
 
-## Sample Clinical Note
+## Sample Clinical Notes
+
+The system includes 12 diverse clinical examples accessible via the "Load Random Sample" button:
+
+### Pediatric Conditions
+- **Croup (4 cases)**: Jack T. (moderate), Emma S. (mild), Oliver M. (severe), Baby Sophie (6 months)
+- **Pneumonia (1 case)**: Tommy R. (5 years, bacterial pneumonia)
+- **Gastroenteritis (2 cases)**: Lily W. (3 years, dehydration), Charlie B. (18 months, mild)
+
+### Adult Conditions
+- **Asthma (2 cases)**: David M. (moderate exacerbation), Robert H. (severe exacerbation)
+- **COPD (1 case)**: Margaret T. (68 years, infective exacerbation)
+- **Pneumonia (1 case)**: Sarah J. (31 years, community-acquired)
+
+### Example Clinical Note (Jack T. - Moderate Croup)
 
 ```
 Patient: Jack T.
@@ -82,6 +105,8 @@ Plan:
 - Administer corticosteroids
 - Plan as per local guidelines for croup
 ```
+
+**Note**: All sample notes use clinical terminology that aligns with the assessment-based diagnosis keywords for accurate condition identification.
 
 ## Data Structure
 
@@ -418,6 +443,20 @@ See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking 
 3. **Reduced Complexity**: No need to manage relationships between separate files
 4. **Faster Lookups**: Single file read instead of multiple joins
 5. **Easier Validation**: Related data validated as a unit
+
+### Why Assessment-Based Diagnosis over Symptom Matching?
+
+1. **Clinical Reality**: Clinicians have already made the diagnosis in the Assessment section
+2. **Symptom Overlap**: Many conditions share symptoms (cough, dyspnea, fever) leading to misdiagnosis
+3. **Accuracy**: Assessment keywords provide more precise condition identification
+4. **Confidence**: Higher confidence scores (10 points) for assessment matches vs symptoms (2 points)
+5. **Age Validation**: Age-appropriate conditions with penalties for mismatches
+
+**Implementation**:
+- **Assessment Keywords**: Each condition has specific diagnostic terms (e.g., "copd exacerbation", "acute asthma")
+- **Scoring System**: Assessment match = 10 points, symptoms = 2 points, age validation = ±1-3 points
+- **Fallback**: If no assessment match found, falls back to symptom matching
+- **Example**: "Acute exacerbation of COPD" in assessment → correctly identifies COPD (not croup)
 
 ### Security Considerations
 

@@ -5,7 +5,7 @@ import json
 import logging
 from typing import Dict, Any, List
 from mcp.server import Server
-from mcp.types import Tool, TextContent, JsonContent
+from mcp.types import Tool, TextContent
 from pathlib import Path
 from .utils.error_handler import (
     ErrorHandler, handle_errors, global_error_handler,
@@ -92,39 +92,63 @@ async def identify_condition(symptoms: List[str], assessment: str, patient_age: 
     conditions = load_json_data(CONDITIONS_FILE)
     check_data_availability(conditions, "conditions")
     
-    # Simple condition matching based on symptoms and assessment
+    # Assessment-based condition matching with fallback to symptoms
     matches = []
+    
+    # Define assessment keywords for each condition
+    assessment_keywords = {
+        'croup': ['croup', 'laryngotracheobronchitis', 'laryngotracheitis', 'viral croup'],
+        'acute_asthma': ['asthma', 'acute asthma', 'asthma exacerbation', 'bronchospasm', 'wheeze'],
+        'copd_exacerbation': ['copd', 'chronic obstructive', 'copd exacerbation', 'acute exacerbation of copd'],
+        'pneumonia': ['pneumonia', 'community-acquired pneumonia', 'cap', 'chest infection', 'lower respiratory tract infection'],
+        'pediatric_gastroenteritis': ['gastroenteritis', 'gastro', 'viral gastroenteritis', 'diarrhea and vomiting', 'stomach bug']
+    }
     
     for condition_id, condition_data in conditions.items():
         score = 0
-        
-        # Check symptoms match
-        primary_symptoms = condition_data.get('symptoms', {}).get('primary', [])
         matched_symptoms = []
+        assessment_match = False
         
-        for symptom in symptoms:
-            if any(symptom.lower() in primary_symptom.lower() for primary_symptom in primary_symptoms):
-                score += 2
-                matched_symptoms.append(symptom)
+        # Primary approach: Check assessment for diagnostic keywords (high weight)
+        if assessment:
+            assessment_lower = assessment.lower()
+            condition_keywords = assessment_keywords.get(condition_id, [])
+            
+            for keyword in condition_keywords:
+                if keyword.lower() in assessment_lower:
+                    score += 10  # High weight for assessment matches
+                    assessment_match = True
+                    break
         
-        # Check assessment match
-        if assessment and condition_data.get('name', '').lower() in assessment.lower():
-            score += 3
+        # Secondary approach: Check symptoms only if no strong assessment match
+        if not assessment_match:
+            primary_symptoms = condition_data.get('symptoms', {}).get('primary', [])
+            
+            for symptom in symptoms:
+                if any(symptom.lower() in primary_symptom.lower() for primary_symptom in primary_symptoms):
+                    score += 2
+                    matched_symptoms.append(symptom)
         
-        # Age group check
+        # Age group validation (bonus points for appropriate age)
         if patient_age is not None and 'age_groups' in condition_data:
             age_groups = condition_data['age_groups']
             if 'pediatric' in age_groups and patient_age < 18:
                 score += 1
             elif 'adult' in age_groups and patient_age >= 18:
                 score += 1
+            # Penalty for wrong age group
+            elif 'pediatric' in age_groups and patient_age >= 18:
+                score -= 3
+            elif 'adult' in age_groups and patient_age < 18:
+                score -= 3
         
         if score > 0:
             matches.append({
                 'condition_id': condition_id,
                 'condition_name': condition_data.get('name', condition_id),
                 'confidence_score': score,
-                'matched_symptoms': matched_symptoms
+                'matched_symptoms': matched_symptoms,
+                'assessment_match': assessment_match
             })
     
     # Sort by confidence score
@@ -467,10 +491,10 @@ async def call_tool(name: str, arguments: dict):
                     details={"tool_name": name, "available_tools": ["parse_clinical_note", "identify_condition", "calculate_medication_dose", "generate_treatment_plan"]}
                 ))
             )
-            return [JsonContent(json=error_response)]
+            return [TextContent(text=json.dumps(error_response, indent=2))]
         
         # Return successful result
-        return [JsonContent(json=result)]
+        return [TextContent(text=json.dumps(result, indent=2))]
             
     except Exception as e:
         # Handle all errors through the global error handler
@@ -478,7 +502,7 @@ async def call_tool(name: str, arguments: dict):
             "tool_name": name,
             "arguments": arguments
         })
-        return [JsonContent(json=error_response)]
+        return [TextContent(text=json.dumps(error_response, indent=2))]
 
 
 def main():

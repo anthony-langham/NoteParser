@@ -129,7 +129,7 @@
       ]
     },
     "follow_up": {
-      "mild_cases": "routine_follow_up_with_gp",
+      "mild_cases": "routine follow up with GP",
       "moderate_cases": "review_24_48_hours",
       "severe_cases": "inpatient_monitoring",
       "parent_education": [
@@ -256,7 +256,12 @@
           "monitoring": {
             "duration": "2-4_hours",
             "frequency": "every_30_minutes",
-            "parameters": ["peak_flow", "respiratory_rate", "heart_rate", "oxygen_saturation"]
+            "parameters": [
+              "peak_flow",
+              "respiratory_rate",
+              "heart_rate",
+              "oxygen_saturation"
+            ]
           },
           "escalation_criteria": [
             "peak_flow_<50%_after_1_hour",
@@ -280,7 +285,12 @@
           "monitoring": {
             "location": "high_dependency_unit",
             "frequency": "continuous",
-            "parameters": ["arterial_blood_gas", "ecg", "peak_flow", "vital_signs"]
+            "parameters": [
+              "arterial_blood_gas",
+              "ecg",
+              "peak_flow",
+              "vital_signs"
+            ]
           },
           "icu_criteria": [
             "exhaustion",
@@ -395,7 +405,11 @@
             "antibiotics": "amoxicillin_500mg_tds_if_purulent_sputum"
           },
           "monitoring": {
-            "parameters": ["oxygen_saturation", "respiratory_rate", "arterial_blood_gas"],
+            "parameters": [
+              "oxygen_saturation",
+              "respiratory_rate",
+              "arterial_blood_gas"
+            ],
             "frequency": "every_2-4_hours"
           },
           "discharge_criteria": [
@@ -418,8 +432,17 @@
             "oxygen": "controlled_to_target_88-92%"
           },
           "niv_criteria": {
-            "indications": ["ph_less_than_7.35", "pCO2_greater_than_6.5", "respiratory_acidosis"],
-            "contraindications": ["facial_trauma", "vomiting", "reduced_consciousness", "pneumothorax"]
+            "indications": [
+              "ph_less_than_7.35",
+              "pCO2_greater_than_6.5",
+              "respiratory_acidosis"
+            ],
+            "contraindications": [
+              "facial_trauma",
+              "vomiting",
+              "reduced_consciousness",
+              "pneumothorax"
+            ]
           },
           "monitoring": {
             "location": "respiratory_ward_or_hdu",
