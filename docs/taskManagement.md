@@ -183,8 +183,31 @@
   - Successfully built and tested component with 181.49 kB bundle size
   - TypeScript type checking passes without errors
   - Development server running successfully on localhost:4000
-- **#022** [TODO]: Implement dose calculator interface
-- **#023** [TODO]: Add API integration layer
+- **#022** [BLOCKED]: Implement dose calculator interface
+  - Blocked: Frontend needs API integration first to connect with existing backend dose calculation logic
+- **#023** [BLOCKED]: Add API integration layer
+  - **Progress Made**:
+    - Created comprehensive API service layer in src/lib/api.ts with TypeScript interfaces
+    - Updated App.tsx to replace hardcoded sample data with real API calls
+    - Fixed TypeScript interfaces in TreatmentPlanDisplay.tsx for optional API response fields
+    - Added conditional rendering for all data sections
+    - Integrated environment variables for API base URL and authentication key
+    - Updated dev server management documentation for port 4000
+  - **CORS Issue Investigation**:
+    - Systematically diagnosed CORS problem: missing `http://localhost:4000` in allowed origins
+    - Identified dual CORS configuration: API Gateway level + Lambda level
+    - Fixed Lambda-level CORS (backend/lambda/cors.py) - added localhost:4000
+    - Fixed API Gateway-level CORS (infrastructure/stacks/API.ts) - added localhost:4000
+    - API stack deployed successfully with updated CORS configuration
+  - **Current Blocker**: 
+    - Frontend still shows CORS error despite deployment
+    - Need to verify CORS fix took effect and test end-to-end integration
+    - Web stack deployment failed (CloudFront conflict) but API stack successful
+  - **Next Session Requirements**:
+    - Test frontend with deployed CORS fix
+    - Debug remaining CORS issues if any
+    - Complete end-to-end API integration testing
+    - Address Web stack deployment failure separately
 - **#024** [TODO]: Implement error handling and loading states
 - **#025** [TODO]: Add responsive design
 - **#026** [TODO]: Deploy frontend to AWS
@@ -210,6 +233,11 @@
 - **Security**: Never commit .env files or sensitive data
 - **Dependencies**: Use exact Node version specified in .nvmrc
 - **Status Updates**: Update task status in CLAUDE.md when starting/completing tasks
+- **Frontend Dev Server Management**: MANDATORY port 4000 workflow:
+  1. **Check port**: `lsof -i:4000`
+  2. **Stop safely**: `lsof -ti:4000 && kill -9 $(lsof -ti:4000) || echo "Port 4000 is free"`
+  3. **Start server**: `npm run dev -- --port 4000`
+  4. **One-liner**: `lsof -ti:4000 && kill -9 $(lsof -ti:4000) || true; npm run dev -- --port 4000`
 
 ### Task Status Management
 

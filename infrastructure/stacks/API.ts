@@ -45,7 +45,7 @@ export function API({ stack }: StackContext) {
       allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
       allowOrigins: stack.stage === "prod" 
         ? ["https://heidimcp.uk", "https://www.heidimcp.uk"] 
-        : ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173", "https://heidimcp.uk"],
+        : ["http://localhost:3000", "http://localhost:4000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:4000", "http://127.0.0.1:5173", "https://heidimcp.uk"],
     },
     routes: {
       // Main application routes

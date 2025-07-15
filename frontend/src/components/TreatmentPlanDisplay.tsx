@@ -43,11 +43,12 @@ interface Recommendations {
 
 interface TreatmentPlanResponse {
   success: boolean
-  patient_data: PatientData
-  condition: Condition
-  calculated_doses: CalculatedDose[]
-  treatment_plan: TreatmentPlan
-  recommendations: Recommendations
+  error?: string
+  patient_data?: PatientData
+  condition?: Condition
+  calculated_doses?: CalculatedDose[]
+  treatment_plan?: TreatmentPlan
+  recommendations?: Recommendations
 }
 
 interface TreatmentPlanDisplayProps {
@@ -74,6 +75,25 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
   }
 
   const { patient_data, condition, calculated_doses, treatment_plan, recommendations } = data
+
+  // Handle cases where data might be undefined
+  if (!patient_data && !condition && !calculated_doses && !treatment_plan) {
+    return (
+      <Card className="w-full border-destructive">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-destructive">
+            <AlertTriangle className="h-5 w-5" />
+            No Data Available
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground">
+            No clinical data was returned from the processing request.
+          </p>
+        </CardContent>
+      </Card>
+    )
+  }
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 0.8) return 'bg-green-100 text-green-800 border-green-200'
@@ -106,16 +126,17 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
       </Card>
 
       {/* Patient Information */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <User className="h-5 w-5" />
-            Patient Information
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {patient_data.name && (
+      {patient_data && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <User className="h-5 w-5" />
+              Patient Information
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {patient_data.name && (
               <div className="space-y-1">
                 <p className="text-sm font-medium text-muted-foreground">Name</p>
                 <p className="text-sm">{patient_data.name}</p>
@@ -147,27 +168,29 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
                 </Badge>
               </div>
             )}
-          </div>
-        </CardContent>
-      </Card>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Condition Identification */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Stethoscope className="h-5 w-5" />
-            Condition Identification
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center gap-3">
-            <h3 className="text-lg font-semibold">{condition.name}</h3>
-            <Badge className={getConfidenceColor(condition.confidence)}>
-              {Math.round(condition.confidence * 100)}% confidence
-            </Badge>
-          </div>
-          
-          {condition.matched_symptoms.length > 0 && (
+      {condition && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Stethoscope className="h-5 w-5" />
+              Condition Identification
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-semibold">{condition.name}</h3>
+              <Badge className={getConfidenceColor(condition.confidence)}>
+                {Math.round(condition.confidence * 100)}% confidence
+              </Badge>
+            </div>
+            
+            {condition.matched_symptoms.length > 0 && (
             <div>
               <p className="text-sm font-medium text-muted-foreground mb-2">Matched Symptoms:</p>
               <div className="flex flex-wrap gap-2">
@@ -179,11 +202,12 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
               </div>
             </div>
           )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Medication Doses */}
-      {calculated_doses.length > 0 && (
+      {calculated_doses && calculated_doses.length > 0 && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -241,20 +265,21 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
       )}
 
       {/* Treatment Plan */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Treatment Plan</CardTitle>
-          <CardDescription>
-            Evidence-based management recommendations
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Immediate Actions */}
-          {treatment_plan.immediate_actions && treatment_plan.immediate_actions.length > 0 && (
-            <div>
-              <h4 className="font-semibold mb-2">Immediate Actions</h4>
-              <ul className="space-y-1">
-                {treatment_plan.immediate_actions.map((action, index) => (
+      {treatment_plan && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Treatment Plan</CardTitle>
+            <CardDescription>
+              Evidence-based management recommendations
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Immediate Actions */}
+            {treatment_plan.immediate_actions && treatment_plan.immediate_actions.length > 0 && (
+              <div>
+                <h4 className="font-semibold mb-2">Immediate Actions</h4>
+                <ul className="space-y-1">
+                  {treatment_plan.immediate_actions.map((action, index) => (
                   <li key={index} className="flex items-start gap-2 text-sm">
                     <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
                     {action}
@@ -264,26 +289,27 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
             </div>
           )}
 
-          {/* Monitoring */}
-          {recommendations.monitoring && (
-            <div>
-              <h4 className="font-semibold mb-2 flex items-center gap-2">
-                <Clock className="h-4 w-4" />
-                Monitoring
-              </h4>
-              <p className="text-sm text-muted-foreground">{recommendations.monitoring}</p>
-            </div>
-          )}
+            {/* Monitoring */}
+            {recommendations?.monitoring && (
+              <div>
+                <h4 className="font-semibold mb-2 flex items-center gap-2">
+                  <Clock className="h-4 w-4" />
+                  Monitoring
+                </h4>
+                <p className="text-sm text-muted-foreground">{recommendations.monitoring}</p>
+              </div>
+            )}
 
-          {/* Follow-up */}
-          {recommendations.follow_up && (
-            <div>
-              <h4 className="font-semibold mb-2">Follow-up</h4>
-              <p className="text-sm text-muted-foreground">{recommendations.follow_up}</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            {/* Follow-up */}
+            {recommendations?.follow_up && (
+              <div>
+                <h4 className="font-semibold mb-2">Follow-up</h4>
+                <p className="text-sm text-muted-foreground">{recommendations.follow_up}</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Clinical Disclaimer */}
       <Card className="border-amber-200 bg-amber-50/50">

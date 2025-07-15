@@ -20,8 +20,10 @@ def get_cors_headers(origin: str = None) -> Dict[str, str]:
         'https://heidimcp.uk',
         'https://www.heidimcp.uk',
         'http://localhost:3000',
+        'http://localhost:4000',  # Standard dev server port
         'http://localhost:5173',  # Vite dev server
         'http://127.0.0.1:3000',
+        'http://127.0.0.1:4000',
         'http://127.0.0.1:5173'
     ]
     

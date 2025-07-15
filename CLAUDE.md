@@ -215,8 +215,20 @@ nvm use
 # Install dependencies
 npm install
 
-# Development server
-npm run dev
+# Development server (always use port 4000)
+# MANDATORY: Always stop existing server before starting new one
+
+# Step 1: Check what's running on port 4000
+lsof -i:4000
+
+# Step 2: Stop any existing dev server (safe - won't error if nothing running)
+lsof -ti:4000 && kill -9 $(lsof -ti:4000) || echo "Port 4000 is free"
+
+# Step 3: Start dev server on port 4000
+npm run dev -- --port 4000
+
+# One-liner to stop and restart:
+# lsof -ti:4000 && kill -9 $(lsof -ti:4000) || true; npm run dev -- --port 4000
 
 # Build for production
 npm run build
