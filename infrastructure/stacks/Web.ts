@@ -5,7 +5,7 @@ import { API } from "./API";
 export function Web({ stack }: StackContext) {
   const api = use(API);
 
-  const site = new StaticSite(stack, "web", {
+  const site = new StaticSite(stack, "frontend", {
     path: "../frontend",
     buildCommand: "npm run build",
     buildOutput: "dist",
@@ -16,7 +16,7 @@ export function Web({ stack }: StackContext) {
       VITE_APP_VERSION: "1.0.0",
       VITE_ENVIRONMENT: stack.stage,
     },
-    // CloudFront distribution configuration - custom domains handled via CDK overrides
+    // CloudFront distribution configuration with custom domains via CDK overrides
     cdk: {
       distribution: {
         defaultBehavior: {
@@ -26,14 +26,10 @@ export function Web({ stack }: StackContext) {
             cachePolicyId: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad", // CachingDisabled for API calls
           },
         },
-        comment: `Heidi Clinical Decision Support - ${stack.stage}`,
+        comment: `Heidi Clinical Decision Support - ${stack.stage} - v2`,
         priceClass: PriceClass.PRICE_CLASS_100, // Use only North America and Europe
       },
     },
-    // Custom domain configuration for production
-    // Note: Using Cloudflare for DNS, SSL cert must be in us-east-1 for CloudFront
-    // Infrastructure in eu-west-2 (London), but CloudFront is global
-    // No SST customDomain - we'll configure CloudFront directly for Cloudflare DNS
   });
 
   // Configure custom domains for production using CDK override (bypasses SST's Route 53 requirement)
