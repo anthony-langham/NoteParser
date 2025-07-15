@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import { Textarea } from './ui/textarea'
 import { Button } from './ui/button'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Shuffle } from 'lucide-react'
 
 interface ClinicalNoteInputProps {
   onSubmit: (note: string) => void
@@ -13,7 +13,10 @@ export function ClinicalNoteInput({ onSubmit, isLoading = false }: ClinicalNoteI
   const [note, setNote] = useState('')
   const [error, setError] = useState('')
 
-  const sampleNote = `Patient: Jack T.
+  const sampleNotes = [
+    {
+      title: "Jack T. - Moderate Croup",
+      note: `Patient: Jack T.
 DOB: 12/03/2022
 Age: 3 years
 Weight: 14.2 kg
@@ -27,6 +30,60 @@ Jack presents with classic features of moderate croup (laryngotracheobronchitis)
 Plan:
 - Administer corticosteroids
 - Plan as per local guidelines for croup`
+    },
+    {
+      title: "Emma S. - Mild Croup",
+      note: `Patient: Emma S.
+DOB: 15/08/2021
+Age: 2 years 11 months
+Weight: 12.8 kg
+
+Presenting complaint:
+Emma presented with a 1-day history of occasional barky cough and mild hoarse voice. No fever reported. Child appears comfortable and is eating and drinking normally.
+
+Assessment:
+Mild croup symptoms. No stridor at rest, no respiratory distress.
+
+Plan:
+- Supportive care
+- Safety netting advice`
+    },
+    {
+      title: "Oliver M. - Severe Croup",
+      note: `Patient: Oliver M.
+DOB: 10/06/2020
+Age: 4 years 1 month
+Weight: 16.5 kg
+
+Presenting complaint:
+Oliver brought in by parents with severe respiratory distress. 3-day history of barky cough and hoarse voice, now with prominent inspiratory stridor audible from the end of the bed. Marked suprasternal and intercostal retractions. Child appears agitated and is drooling.
+
+Assessment:
+Severe croup with significant respiratory distress. Concerned about impending respiratory failure.
+
+Plan:
+- Urgent corticosteroids
+- Consider nebulized adrenaline
+- Close monitoring`
+    },
+    {
+      title: "Baby Sophie - Young Infant Croup",
+      note: `Patient: Baby Sophie R.
+DOB: 12/01/2024
+Age: 6 months
+Weight: 7.2 kg
+
+Presenting complaint:
+Sophie presented with a 12-hour history of barky cough and mild stridor. Low-grade fever of 37.8°C. Parents report she has been feeding well but sounds congested.
+
+Assessment:
+Early croup symptoms in young infant. Mild to moderate presentation.
+
+Plan:
+- Close observation
+- Consider steroids if worsening`
+    }
+  ]
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,8 +103,10 @@ Plan:
     onSubmit(note)
   }
 
-  const handleLoadSample = () => {
-    setNote(sampleNote)
+  const handleLoadRandomSample = () => {
+    const randomIndex = Math.floor(Math.random() * sampleNotes.length)
+    const selectedSample = sampleNotes[randomIndex]
+    setNote(selectedSample.note)
     setError('')
   }
 
@@ -108,12 +167,13 @@ Plan:
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={handleLoadSample}
+                onClick={handleLoadRandomSample}
                 disabled={isLoading}
                 className="flex-1 sm:flex-none"
               >
-                <span className="hidden sm:inline">Load Sample</span>
-                <span className="sm:hidden">Sample</span>
+                <Shuffle className="mr-1 h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Load Random Sample</span>
+                <span className="sm:hidden">Random</span>
               </Button>
               
               <Button 
