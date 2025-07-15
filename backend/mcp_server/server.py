@@ -3,6 +3,7 @@
 import asyncio
 import json
 import logging
+import re
 from typing import Dict, Any, List
 from mcp.server import Server
 from mcp.types import Tool, TextContent
@@ -115,7 +116,9 @@ async def identify_condition(symptoms: List[str], assessment: str, patient_age: 
             condition_keywords = assessment_keywords.get(condition_id, [])
             
             for keyword in condition_keywords:
-                if keyword.lower() in assessment_lower:
+                # Use word boundaries to avoid false positives (e.g., "cap" in "capillary")
+                keyword_pattern = r'\b' + re.escape(keyword.lower()) + r'\b'
+                if re.search(keyword_pattern, assessment_lower):
                     score += 10  # High weight for assessment matches
                     assessment_match = True
                     break

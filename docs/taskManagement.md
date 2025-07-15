@@ -366,6 +366,21 @@
   - Fixed issue where treatment plans persisted after clicking clear button
   - Enables users to get a clean slate for new clinical note processing
 
+- **#033** [DONE]: Fix dictionary issue - Assessment keyword false positive matching
+  - **Problem**: Charlie B.'s viral gastroenteritis case was being misdiagnosed as community-acquired pneumonia
+  - **Root Cause**: Assessment keyword matching used substring matching, causing "cap" (pneumonia abbreviation) to match "capillary" in "capillary refill"
+  - **Solution**: Updated condition identification logic in backend/mcp_server/server.py to use word boundary regex patterns
+  - **Technical Changes**:
+    - Added `import re` to server.py imports
+    - Modified assessment keyword matching from substring to word boundary pattern: `r'\b' + re.escape(keyword.lower()) + r'\b'`
+    - Prevents false positive matches where abbreviations appear within other words
+  - **Testing**: Verified fix works correctly for all conditions:
+    - Charlie's gastroenteritis now correctly identified as `pediatric_gastroenteritis` (11 points)
+    - Pneumonia cases still work with full word "pneumonia" and standalone "CAP"
+    - Croup cases unaffected and working correctly
+    - No regression in other condition matching
+  - **Clinical Impact**: Eliminates risk of incorrect treatment recommendations due to keyword matching errors
+
 ## Task Guidelines
 
 - Before commencing a new task ensure you think really hard about the optimal solution before starting

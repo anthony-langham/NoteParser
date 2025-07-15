@@ -168,7 +168,14 @@
       "life_threatening": {
         "criteria": "Unable to speak, exhaustion, altered consciousness, silent chest",
         "peak_flow_percentage": "<33%",
-        "features": ["silent chest", "cyanosis", "bradycardia", "hypotension", "exhaustion", "confusion"]
+        "features": [
+          "silent chest",
+          "cyanosis",
+          "bradycardia",
+          "hypotension",
+          "exhaustion",
+          "confusion"
+        ]
       }
     },
     "medications": {
@@ -179,9 +186,7 @@
           "frequency": "every 20 minutes for first hour, then hourly",
           "duration": "until improvement",
           "age_restrictions": "≥18 years",
-          "contraindications": [
-            "known hypersensitivity"
-          ],
+          "contraindications": ["known hypersensitivity"],
           "clinical_notes": "Can be given continuously in severe cases. Monitor for tremor and tachycardia."
         },
         "ipratropium_bromide": {
@@ -301,7 +306,12 @@
       "severe": {
         "criteria": "Requires hospitalization or emergency visit",
         "symptoms": "marked increase in symptoms, unable to perform daily activities",
-        "signs": ["accessory muscle use", "paradoxical chest movements", "new cyanosis", "peripheral edema"],
+        "signs": [
+          "accessory muscle use",
+          "paradoxical chest movements",
+          "new cyanosis",
+          "peripheral edema"
+        ],
         "functional_status": "severe impact"
       }
     },
@@ -313,9 +323,7 @@
           "frequency": "every 4-6 hours",
           "duration": "until improvement",
           "age_restrictions": "≥18 years",
-          "contraindications": [
-            "known hypersensitivity"
-          ],
+          "contraindications": ["known hypersensitivity"],
           "clinical_notes": "Can increase frequency in acute phase. Consider adding ipratropium."
         },
         "ipratropium": {
@@ -348,10 +356,7 @@
           "frequency": "three times daily",
           "duration": "5 days",
           "age_restrictions": "≥18 years",
-          "contraindications": [
-            "penicillin allergy",
-            "known hypersensitivity"
-          ],
+          "contraindications": ["penicillin allergy", "known hypersensitivity"],
           "clinical_notes": "For purulent sputum or increased sputum volume. Alternative: doxycycline 200mg stat then 100mg daily."
         }
       },
