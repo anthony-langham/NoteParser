@@ -118,5 +118,299 @@
       "Retropharyngeal abscess",
       "Angioedema"
     ]
+  },
+  "acute_asthma": {
+    "name": "Acute Asthma Exacerbation",
+    "description": "Acute worsening of asthma symptoms requiring immediate medical intervention in adults",
+    "icd_codes": ["J45.901", "J45.902", "J45.909"],
+    "age_groups": ["adult"],
+    "symptoms": {
+      "primary": [
+        "wheezing",
+        "shortness of breath",
+        "chest tightness",
+        "cough"
+      ],
+      "secondary": [
+        "difficulty speaking in sentences",
+        "use of accessory muscles",
+        "tachypnea",
+        "tachycardia",
+        "anxiety",
+        "diaphoresis"
+      ]
+    },
+    "severity_scales": {
+      "mild": {
+        "criteria": "Able to speak in sentences, mild dyspnea, peak flow >70% predicted",
+        "peak_flow_percentage": ">70%",
+        "respiratory_rate": "<25/min",
+        "heart_rate": "<110/min",
+        "oxygen_saturation": ">95%",
+        "speech": "sentences"
+      },
+      "moderate": {
+        "criteria": "Speaking in phrases, moderate dyspnea, peak flow 40-70% predicted",
+        "peak_flow_percentage": "40-70%",
+        "respiratory_rate": "25-30/min",
+        "heart_rate": "110-120/min",
+        "oxygen_saturation": "90-95%",
+        "speech": "phrases"
+      },
+      "severe": {
+        "criteria": "Speaking in words only, severe dyspnea, peak flow <40% predicted",
+        "peak_flow_percentage": "<40%",
+        "respiratory_rate": ">30/min",
+        "heart_rate": ">120/min",
+        "oxygen_saturation": "<90%",
+        "speech": "words only"
+      },
+      "life_threatening": {
+        "criteria": "Unable to speak, exhaustion, altered consciousness, silent chest",
+        "peak_flow_percentage": "<33%",
+        "features": ["silent chest", "cyanosis", "bradycardia", "hypotension", "exhaustion", "confusion"]
+      }
+    },
+    "medications": {
+      "first_line": {
+        "salbutamol_nebulized": {
+          "dose_mg": 5,
+          "route": "nebulized",
+          "frequency": "every 20 minutes for first hour, then hourly",
+          "duration": "until improvement",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "known hypersensitivity"
+          ],
+          "clinical_notes": "Can be given continuously in severe cases. Monitor for tremor and tachycardia."
+        },
+        "ipratropium_bromide": {
+          "dose_mg": 0.5,
+          "route": "nebulized",
+          "frequency": "every 20 minutes for first hour, then every 4-6 hours",
+          "duration": "until improvement",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "known hypersensitivity",
+            "narrow-angle glaucoma"
+          ],
+          "clinical_notes": "Add to salbutamol nebulizer for moderate to severe exacerbations."
+        },
+        "prednisolone": {
+          "dose_mg": 40,
+          "route": "oral",
+          "frequency": "daily",
+          "duration": "5 days",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "known hypersensitivity",
+            "active systemic infection"
+          ],
+          "clinical_notes": "Give early. No need to taper for 5-day course. Alternative: hydrocortisone 100mg IV q6h if unable to take orally."
+        }
+      },
+      "second_line": {
+        "magnesium_sulfate": {
+          "dose_g": 2,
+          "route": "IV infusion over 20 minutes",
+          "frequency": "single dose",
+          "duration": "1 dose",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "heart block",
+            "myasthenia gravis",
+            "severe renal impairment"
+          ],
+          "clinical_notes": "For severe exacerbations not responding to initial treatment. Monitor BP and deep tendon reflexes."
+        },
+        "aminophylline": {
+          "loading_dose_mg": 250,
+          "maintenance_dose_mg_per_hour": 35,
+          "route": "IV",
+          "frequency": "continuous infusion",
+          "duration": "until improvement",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "cardiac arrhythmias",
+            "seizure disorders",
+            "peptic ulcer disease"
+          ],
+          "clinical_notes": "Consider only if not responding to other therapies. Narrow therapeutic window. Monitor levels."
+        }
+      }
+    },
+    "clinical_pearls": [
+      "Triggers include allergens, infections, exercise, cold air, stress",
+      "Silent chest is an ominous sign indicating severe airflow limitation",
+      "Peak flow monitoring helps assess severity and response to treatment",
+      "Oxygen target 94-98% (or 88-92% if risk of hypercapnic respiratory failure)",
+      "Consider ICU if requiring >40% oxygen or deteriorating despite treatment",
+      "Always provide written asthma action plan on discharge"
+    ],
+    "red_flags": [
+      "Silent chest",
+      "Cyanosis",
+      "Exhaustion or altered consciousness",
+      "Bradycardia or arrhythmia",
+      "Hypotension",
+      "Peak flow <33% predicted after treatment",
+      "Rising pCO2 or normal pCO2 in severe attack"
+    ],
+    "differential_diagnosis": [
+      "COPD exacerbation",
+      "Pneumonia",
+      "Pulmonary embolism",
+      "Pneumothorax",
+      "Anaphylaxis",
+      "Cardiac failure"
+    ]
+  },
+  "copd_exacerbation": {
+    "name": "Acute Exacerbation of COPD",
+    "description": "Acute worsening of respiratory symptoms in patients with chronic obstructive pulmonary disease requiring additional therapy",
+    "icd_codes": ["J44.0", "J44.1"],
+    "age_groups": ["adult"],
+    "symptoms": {
+      "primary": [
+        "increased dyspnea",
+        "increased cough",
+        "increased sputum production",
+        "change in sputum color"
+      ],
+      "secondary": [
+        "wheeze",
+        "chest tightness",
+        "fever",
+        "upper respiratory symptoms",
+        "reduced exercise tolerance",
+        "fatigue",
+        "confusion"
+      ]
+    },
+    "severity_scales": {
+      "mild": {
+        "criteria": "Managed at home with increased bronchodilator use",
+        "symptoms": "increased symptoms but able to manage daily activities",
+        "functional_status": "minimal impact"
+      },
+      "moderate": {
+        "criteria": "Requires systemic corticosteroids and/or antibiotics",
+        "symptoms": "significant increase in symptoms, limitation of daily activities",
+        "functional_status": "moderate impact"
+      },
+      "severe": {
+        "criteria": "Requires hospitalization or emergency visit",
+        "symptoms": "marked increase in symptoms, unable to perform daily activities",
+        "signs": ["accessory muscle use", "paradoxical chest movements", "new cyanosis", "peripheral edema"],
+        "functional_status": "severe impact"
+      }
+    },
+    "medications": {
+      "first_line": {
+        "salbutamol": {
+          "dose_mg": 5,
+          "route": "nebulized",
+          "frequency": "every 4-6 hours",
+          "duration": "until improvement",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "known hypersensitivity"
+          ],
+          "clinical_notes": "Can increase frequency in acute phase. Consider adding ipratropium."
+        },
+        "ipratropium": {
+          "dose_mg": 0.5,
+          "route": "nebulized",
+          "frequency": "every 6 hours",
+          "duration": "until improvement",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "known hypersensitivity",
+            "narrow-angle glaucoma"
+          ],
+          "clinical_notes": "Often combined with salbutamol. Maximum benefit when used together."
+        },
+        "prednisolone": {
+          "dose_mg": 30,
+          "route": "oral",
+          "frequency": "daily",
+          "duration": "5 days",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "known hypersensitivity",
+            "active systemic infection"
+          ],
+          "clinical_notes": "Short course without taper. Speeds recovery and reduces treatment failure."
+        },
+        "amoxicillin": {
+          "dose_mg": 500,
+          "route": "oral",
+          "frequency": "three times daily",
+          "duration": "5 days",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "penicillin allergy",
+            "known hypersensitivity"
+          ],
+          "clinical_notes": "For purulent sputum or increased sputum volume. Alternative: doxycycline 200mg stat then 100mg daily."
+        }
+      },
+      "second_line": {
+        "doxycycline": {
+          "loading_dose_mg": 200,
+          "maintenance_dose_mg": 100,
+          "route": "oral",
+          "frequency": "daily",
+          "duration": "5 days",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "pregnancy",
+            "known hypersensitivity",
+            "children <12 years"
+          ],
+          "clinical_notes": "Alternative antibiotic if penicillin allergic or local resistance patterns indicate."
+        },
+        "co_amoxiclav": {
+          "dose_mg": 625,
+          "route": "oral",
+          "frequency": "three times daily",
+          "duration": "5-7 days",
+          "age_restrictions": "≥18 years",
+          "contraindications": [
+            "penicillin allergy",
+            "known hypersensitivity",
+            "previous jaundice with co-amoxiclav"
+          ],
+          "clinical_notes": "For treatment failure or risk factors for resistant organisms."
+        }
+      }
+    },
+    "clinical_pearls": [
+      "Most exacerbations are triggered by respiratory infections (viral or bacterial)",
+      "Anthonisen criteria: increased dyspnea, sputum volume, sputum purulence",
+      "Oxygen target 88-92% to avoid hypercapnic respiratory failure",
+      "Consider NIV (BiPAP) for pH <7.35 or hypercapnic respiratory failure",
+      "Antibiotics indicated if purulent sputum or severe exacerbation",
+      "Review inhaler technique and provide smoking cessation advice"
+    ],
+    "red_flags": [
+      "Severe dyspnea at rest",
+      "Accessory muscle use",
+      "Paradoxical chest movements",
+      "New cyanosis",
+      "Peripheral edema",
+      "Altered mental status",
+      "Hemodynamic instability",
+      "pH <7.35",
+      "pO2 <60mmHg on room air"
+    ],
+    "differential_diagnosis": [
+      "Pneumonia",
+      "Pulmonary embolism",
+      "Pneumothorax",
+      "Cardiac failure",
+      "Pleural effusion",
+      "Lung cancer"
+    ]
   }
 }

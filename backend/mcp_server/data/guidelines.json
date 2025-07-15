@@ -172,5 +172,289 @@
         "severe_hypertension"
       ]
     }
+  },
+  "adult_acute_asthma_management": {
+    "name": "Adult Acute Asthma Management Protocol",
+    "version": "1.0",
+    "last_updated": "2024-07-15",
+    "source": "Based on BTS/SIGN Guidelines, GINA Guidelines, and clinical best practice",
+    "conditions": ["acute_asthma"],
+    "decision_tree": {
+      "initial_assessment": {
+        "history": [
+          "Duration and onset of symptoms",
+          "Known triggers or precipitants",
+          "Current asthma medications and compliance",
+          "Previous hospital admissions or ICU stays",
+          "Recent changes in medication",
+          "Peak flow if available"
+        ],
+        "physical_examination": [
+          "Respiratory rate and accessory muscle use",
+          "Ability to complete sentences",
+          "Wheeze intensity and air entry",
+          "Heart rate and blood pressure",
+          "Oxygen saturation",
+          "Level of consciousness",
+          "Peak expiratory flow rate"
+        ],
+        "severity_assessment": {
+          "mild": {
+            "management": "bronchodilators_and_steroids",
+            "disposition": "home_with_follow_up",
+            "follow_up": "24-48_hours"
+          },
+          "moderate": {
+            "management": "intensive_bronchodilators_and_steroids",
+            "disposition": "observe_then_reassess",
+            "follow_up": "specialist_referral"
+          },
+          "severe": {
+            "management": "maximum_therapy_consider_iv",
+            "disposition": "admit_consider_icu",
+            "follow_up": "inpatient_management"
+          },
+          "life_threatening": {
+            "management": "immediate_intensive_care",
+            "disposition": "icu_admission",
+            "follow_up": "critical_care"
+          }
+        }
+      },
+      "treatment_algorithm": {
+        "mild": {
+          "immediate_actions": [
+            "Oxygen to maintain SpO2 94-98%",
+            "Peak flow measurement",
+            "Reassure patient"
+          ],
+          "medications": {
+            "bronchodilators": "salbutamol_5mg_nebulized_every_20_minutes",
+            "steroids": "prednisolone_40mg_oral_immediately"
+          },
+          "monitoring": {
+            "duration": "1-2_hours",
+            "parameters": ["peak_flow", "symptoms", "oxygen_saturation"]
+          },
+          "discharge_criteria": [
+            "peak_flow_>75%_predicted",
+            "stable_on_room_air",
+            "adequate_inhaler_technique",
+            "written_asthma_action_plan"
+          ]
+        },
+        "moderate": {
+          "immediate_actions": [
+            "Oxygen to maintain SpO2 94-98%",
+            "Continuous monitoring",
+            "IV access if poor response"
+          ],
+          "medications": {
+            "bronchodilators": "salbutamol_5mg_plus_ipratropium_0.5mg_nebulized",
+            "steroids": "prednisolone_40mg_oral_or_hydrocortisone_100mg_iv"
+          },
+          "monitoring": {
+            "duration": "2-4_hours",
+            "frequency": "every_30_minutes",
+            "parameters": ["peak_flow", "respiratory_rate", "heart_rate", "oxygen_saturation"]
+          },
+          "escalation_criteria": [
+            "peak_flow_<50%_after_1_hour",
+            "deteriorating_symptoms",
+            "rising_pCO2"
+          ]
+        },
+        "severe": {
+          "immediate_actions": [
+            "High flow oxygen",
+            "Senior medical review",
+            "Consider arterial blood gas",
+            "IV access mandatory"
+          ],
+          "medications": {
+            "bronchodilators": "continuous_nebulization_or_back_to_back",
+            "steroids": "hydrocortisone_100mg_iv_6_hourly",
+            "magnesium": "magnesium_sulfate_2g_iv_over_20_minutes",
+            "consider": "aminophylline_if_not_responding"
+          },
+          "monitoring": {
+            "location": "high_dependency_unit",
+            "frequency": "continuous",
+            "parameters": ["arterial_blood_gas", "ecg", "peak_flow", "vital_signs"]
+          },
+          "icu_criteria": [
+            "exhaustion",
+            "altered_consciousness",
+            "hypercapnia",
+            "need_for_ventilation"
+          ]
+        }
+      }
+    },
+    "monitoring": {
+      "response_assessment": {
+        "good_response": "peak_flow_>75%_improving_symptoms",
+        "partial_response": "peak_flow_50-75%_some_improvement",
+        "poor_response": "peak_flow_<50%_worsening_symptoms"
+      },
+      "red_flags": [
+        "silent_chest",
+        "cyanosis",
+        "bradycardia",
+        "exhaustion",
+        "confusion",
+        "peak_flow_<33%"
+      ]
+    },
+    "follow_up": {
+      "discharge_requirements": [
+        "stable_on_discharge_medications",
+        "peak_flow_>75%",
+        "inhaler_technique_checked",
+        "written_action_plan_provided",
+        "follow_up_arranged"
+      ],
+      "outpatient_review": {
+        "timing": "within_2_working_days",
+        "provider": "gp_or_asthma_nurse",
+        "consider_referral": "respiratory_specialist"
+      }
+    }
+  },
+  "adult_copd_exacerbation_management": {
+    "name": "Adult COPD Exacerbation Management Protocol",
+    "version": "1.0",
+    "last_updated": "2024-07-15",
+    "source": "Based on GOLD Guidelines, NICE Guidelines, and clinical best practice",
+    "conditions": ["copd_exacerbation"],
+    "decision_tree": {
+      "initial_assessment": {
+        "history": [
+          "Baseline exercise tolerance and recent changes",
+          "Sputum color and volume changes",
+          "Current COPD medications",
+          "Home oxygen use",
+          "Previous admissions and NIV use",
+          "Smoking status"
+        ],
+        "physical_examination": [
+          "Respiratory rate and pattern",
+          "Use of accessory muscles",
+          "Pursed lip breathing",
+          "Cyanosis and peripheral edema",
+          "Temperature and signs of infection",
+          "Mental status"
+        ],
+        "investigations": [
+          "Arterial blood gas if severe",
+          "Chest X-ray",
+          "ECG if cardiovascular concerns",
+          "Blood tests including inflammatory markers"
+        ],
+        "severity_assessment": {
+          "mild": {
+            "management": "increase_bronchodilators",
+            "disposition": "home_management",
+            "follow_up": "routine"
+          },
+          "moderate": {
+            "management": "bronchodilators_steroids_antibiotics",
+            "disposition": "home_or_short_observation",
+            "follow_up": "48-72_hours"
+          },
+          "severe": {
+            "management": "hospital_admission_full_treatment",
+            "disposition": "admit",
+            "follow_up": "inpatient"
+          }
+        }
+      },
+      "treatment_algorithm": {
+        "mild": {
+          "immediate_actions": [
+            "Increase frequency of short-acting bronchodilators",
+            "Review inhaler technique",
+            "Ensure adequate hydration"
+          ],
+          "medications": {
+            "bronchodilators": "increase_salbutamol_frequency",
+            "steroids": "consider_if_not_improving"
+          },
+          "monitoring": "self_monitoring_with_action_plan",
+          "safety_netting": "clear_escalation_plan"
+        },
+        "moderate": {
+          "immediate_actions": [
+            "Controlled oxygen therapy 88-92%",
+            "Check ABG if SpO2 <92%",
+            "Assess for signs of respiratory failure"
+          ],
+          "medications": {
+            "bronchodilators": "salbutamol_5mg_ipratropium_0.5mg_nebulized",
+            "steroids": "prednisolone_30mg_daily_for_5_days",
+            "antibiotics": "amoxicillin_500mg_tds_if_purulent_sputum"
+          },
+          "monitoring": {
+            "parameters": ["oxygen_saturation", "respiratory_rate", "arterial_blood_gas"],
+            "frequency": "every_2-4_hours"
+          },
+          "discharge_criteria": [
+            "stable_on_room_air_or_usual_oxygen",
+            "able_to_manage_at_home",
+            "adequate_social_support"
+          ]
+        },
+        "severe": {
+          "immediate_actions": [
+            "Controlled oxygen to maintain SpO2 88-92%",
+            "Urgent ABG",
+            "Senior review",
+            "Consider NIV if pH <7.35"
+          ],
+          "medications": {
+            "bronchodilators": "regular_nebulizers_every_4-6_hours",
+            "steroids": "prednisolone_30mg_or_hydrocortisone_iv",
+            "antibiotics": "amoxicillin_or_doxycycline_or_co_amoxiclav",
+            "oxygen": "controlled_to_target_88-92%"
+          },
+          "niv_criteria": {
+            "indications": ["ph_less_than_7.35", "pCO2_greater_than_6.5", "respiratory_acidosis"],
+            "contraindications": ["facial_trauma", "vomiting", "reduced_consciousness", "pneumothorax"]
+          },
+          "monitoring": {
+            "location": "respiratory_ward_or_hdu",
+            "frequency": "continuous_monitoring",
+            "parameters": ["abg", "respiratory_rate", "consciousness_level"]
+          }
+        }
+      }
+    },
+    "monitoring": {
+      "treatment_response": {
+        "improving": "reduced_dyspnea_improved_abg",
+        "static": "no_change_reassess_treatment",
+        "deteriorating": "consider_icu_mechanical_ventilation"
+      },
+      "complications": [
+        "hypercapnic_respiratory_failure",
+        "pneumothorax",
+        "pulmonary_embolism",
+        "cardiac_arrhythmias"
+      ]
+    },
+    "follow_up": {
+      "discharge_planning": [
+        "smoking_cessation_advice",
+        "inhaler_technique_review",
+        "pulmonary_rehabilitation_referral",
+        "vaccination_status_check",
+        "oxygen_assessment_if_indicated"
+      ],
+      "outpatient_review": {
+        "timing": "within_2_weeks",
+        "provider": "respiratory_team_or_copd_nurse",
+        "optimization": "review_maintenance_therapy"
+      }
+    }
   }
 }

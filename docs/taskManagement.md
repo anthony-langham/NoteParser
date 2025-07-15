@@ -303,7 +303,32 @@
     - Implemented random selection algorithm for varied testing scenarios
     - Maintains responsive design with appropriate mobile/desktop button text variations
     - Enables comprehensive system testing across different patient ages (6 months to 4 years) and severity presentations
-- **#028** [TODO]: Clinical scenario validation and additional clinical scenarios - different medical issue - adult with acute asthma (needing oral steriods but not hospital admission), adult with infective exacerabtion of COPD (green sputum and fever needing amoxicillin and prednisolone)
+- **#028** [DONE]: Clinical scenario validation and additional clinical scenarios - different medical issue - adult with acute asthma (needing oral steroids but not hospital admission), adult with infective exacerbation of COPD (green sputum and fever needing amoxicillin and prednisolone)
+  - Added comprehensive adult acute asthma condition to conditions.json with severity scales (mild, moderate, severe, life-threatening)
+  - Implemented complete medication dosing for asthma including salbutamol, ipratropium, prednisolone, magnesium sulfate, and aminophylline
+  - Added adult COPD exacerbation condition to conditions.json with GOLD-based severity assessment
+  - Configured COPD medications including bronchodilators, corticosteroids, and antibiotic options (amoxicillin, doxycycline, co-amoxiclav)
+  - Created adult_acute_asthma_management guideline with BTS/SIGN based decision trees and treatment algorithms
+  - Created adult_copd_exacerbation_management guideline with GOLD/NICE based protocols including NIV criteria
+  - Included appropriate oxygen targets (94-98% for asthma, 88-92% for COPD) to avoid hypercapnic respiratory failure
+  - Added red flags, differential diagnoses, and follow-up protocols for both conditions
+  - Validated JSON integrity for both conditions.json and guidelines.json files
+  - System now supports adult respiratory emergencies with same comprehensive approach as pediatric cases
+- \*\*#028.5## [TODO]: OpenAI advice
+  - Tighten the JSON Schemas for each tool (units, enums, min/max).
+  - Add at least two more conditions (asthma, pneumonia) with full dosing & guidelines to prove extensibility.
+  - Switch outputs to JsonContent (or wrap in assistant_response JSON) so evaluators can feed them straight back into the model.
+  - Bundle a 20-line agent demo that:
+    • parses a note,
+    • identifies the condition,
+    • calculates dose,
+    • generates plan,
+    • prints the result.
+  - Edge-case tests: negative weight, unknown drug, missing age, etc.
+  - Generate a comprehensive README including a Clinical safety disclaimer in README: “prototype only, not for production use”.
+
+These tweaks are low-effort but show professional polish and a deep grasp of agentic patterns.
+
 - **#029** [TODO]: Performance optimization
 - **#030** [TODO]: Create architecture diagram
 - **#031** [TODO]: Record demo video
