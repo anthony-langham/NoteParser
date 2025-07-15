@@ -20,6 +20,9 @@ interface CalculatedDose {
   medication_name?: string
   medication?: string
   calculated_dose: number
+  dose_per_kg?: number
+  patient_weight?: number
+  dosing_rationale?: string
   route: string
   frequency: string
   duration: string
@@ -88,7 +91,7 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
     )
   }
 
-  const { patient_data, condition, calculated_doses, treatment_plan, recommendations } = data
+  const { patient_data, condition, calculated_doses, treatment_plan } = data
 
   // Handle cases where data might be undefined
   if (!patient_data && !condition && !calculated_doses && !treatment_plan) {
@@ -109,11 +112,6 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
     )
   }
 
-  const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return 'bg-green-100 text-green-800 border-green-200'
-    if (confidence >= 0.6) return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-    return 'bg-red-100 text-red-800 border-red-200'
-  }
 
   const getSeverityColor = (severity: string) => {
     switch (severity?.toLowerCase()) {
@@ -243,22 +241,38 @@ export function TreatmentPlanDisplay({ data }: TreatmentPlanDisplayProps) {
                   </div>
                   
                   {dose.success && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
-                      <div>
-                        <span className="font-medium text-muted-foreground">Dose: </span>
-                        <span className="font-semibold">{dose.calculated_dose} mg</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-muted-foreground">Route: </span>
-                        <span>{dose.route}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-muted-foreground">Frequency: </span>
-                        <span>{dose.frequency}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium text-muted-foreground">Duration: </span>
-                        <span>{dose.duration}</span>
+                    <div className="space-y-3">
+                      {/* Dosing Calculation */}
+                      {dose.dose_per_kg && dose.patient_weight && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-md p-3">
+                          <div className="text-xs font-medium text-blue-800 mb-1">Weight-Based Calculation</div>
+                          <div className="text-sm text-blue-700">
+                            <span className="font-semibold">{dose.dose_per_kg} mg/kg</span> × <span className="font-semibold">{dose.patient_weight} kg</span> = <span className="font-semibold">{dose.calculated_dose} mg</span>
+                          </div>
+                          {dose.dosing_rationale && (
+                            <div className="text-xs text-blue-600 mt-1">{dose.dosing_rationale}</div>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Medication Details */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+                        <div>
+                          <span className="font-medium text-muted-foreground">Final Dose: </span>
+                          <span className="font-semibold">{dose.calculated_dose} mg</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-muted-foreground">Route: </span>
+                          <span>{dose.route}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-muted-foreground">Frequency: </span>
+                          <span>{dose.frequency}</span>
+                        </div>
+                        <div>
+                          <span className="font-medium text-muted-foreground">Duration: </span>
+                          <span>{dose.duration}</span>
+                        </div>
                       </div>
                     </div>
                   )}
