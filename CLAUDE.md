@@ -199,6 +199,7 @@ heidi/
 │   └── dist/                # Build output
 ├── infrastructure/
 │   ├── sst.config.ts        # SST configuration
+│   ├── README.md            # Deployment documentation
 │   └── stacks/              # AWS CDK stacks
 ├── docs/
 │   ├── Overview.md          # Deployment overview
@@ -207,6 +208,7 @@ heidi/
 │   └── taskManagement.md    # Task tracking and management
 ├── README.md
 ├── LICENSE
+├── deploy.sh                # Automated deployment script
 └── CLAUDE.md                # This file
 ```
 
@@ -227,8 +229,11 @@ python3 -m mcp_server.server
 # Run tests
 python3 -m pytest tests/
 
-# Deploy to AWS
-npx sst deploy --stage prod
+# Deploy to AWS (from infrastructure directory)
+cd infrastructure && npx sst deploy --stage prod
+
+# Or use the deployment script from project root
+./deploy.sh
 ```
 
 ### Frontend (React)
@@ -268,18 +273,33 @@ npm run type-check
 npm run lint
 ```
 
-### Infrastructure
+### Infrastructure & Deployment
 
 ```bash
 # Use correct Node version
 nvm use
 
-# Deploy infrastructure
+# Quick Deployment (recommended)
+# Uses automated deployment script from project root
+./deploy.sh
+
+# Advanced deployment options
+./deploy.sh --stage dev                    # Deploy to dev environment
+./deploy.sh --skip-build                   # Skip manual frontend build
+./deploy.sh --stack Web                    # Deploy only frontend stack
+./deploy.sh --stack API                    # Deploy only backend stack
+
+# Manual SST deployment (from infrastructure directory)
+cd infrastructure
 npx sst deploy --stage dev
 npx sst deploy --stage prod
 
 # Remove infrastructure
 npx sst remove --stage dev
+npx sst remove --stage prod
+
+# Check deployment status
+aws cloudformation describe-stacks --stack-name prod-heidi-Web --query 'Stacks[0].StackStatus'
 
 # Configure Cloudflare DNS
 # Point heidimcp.uk to CloudFront distribution
