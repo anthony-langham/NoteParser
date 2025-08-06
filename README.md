@@ -1,8 +1,8 @@
-# 🩺 Heidi - Clinical Decision Support System
+# 🩺 NoteParser - Clinical Decision Support System
 
 ## Overview
 
-Heidi is an intelligent clinical decision support system that leverages the Model Context Protocol (MCP) to provide structured, auditable clinical recommendations. The system ingests unstructured clinical notes and generates evidence-based treatment plans with precise medication dosing calculations.
+An intelligent clinical decision support system that leverages the Model Context Protocol (MCP) to provide structured, auditable clinical recommendations. The system ingests unstructured clinical notes and generates evidence-based treatment plans with precise medication dosing calculations.
 
 ### 🎯 Core Features
 
@@ -22,7 +22,7 @@ Heidi is an intelligent clinical decision support system that leverages the Mode
 
 ### 🌐 Live Demo
 
-🔗 **Production System**: [https://heidimcp.uk](https://heidimcp.uk)
+🔗 **Production System**:
 
 ## Architecture
 
