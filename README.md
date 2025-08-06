@@ -68,8 +68,6 @@ An intelligent clinical decision support system that leverages the Model Context
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/username/heidi.git
-cd heidi
 
 # 2. Install Node Version Manager (if not installed)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
@@ -212,7 +210,7 @@ The system provides structured error responses:
 ### Project Structure
 
 ```
-heidi/
+root/
 ├── backend/
 │   ├── mcp_server/          # MCP server implementation
 │   │   ├── server.py        # Main MCP server
