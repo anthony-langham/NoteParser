@@ -90,7 +90,7 @@ aws cloudformation describe-stacks --stack-name "${STAGE}-heidi-Web" --query 'St
 # Show the deployed URLs
 echo -e "${GREEN}🌐 Deployed URLs:${NC}"
 if [ "$STAGE" = "prod" ]; then
-    echo -e "   Frontend: ${GREEN}https://heidimcp.uk${NC}"
+    echo -e "   Frontend: ${GREEN}https://noteparser.uk${NC}"
     echo -e "   API: Based on API Gateway configuration"
     
     # Get the CloudFront distribution ID for cache invalidation tip

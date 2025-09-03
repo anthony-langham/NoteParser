@@ -74,7 +74,7 @@ backend/
 ### Environment Variables (.env)
 ```bash
 API_KEY=<secure-32-char-hex-key>    # Generated automatically
-CORS_ORIGINS=https://heidimcp.uk,http://localhost:3000
+CORS_ORIGINS=https://noteparser.uk,http://localhost:3000
 AWS_REGION=us-east-1                # For production deployment
 LOG_LEVEL=INFO
 ENVIRONMENT=development

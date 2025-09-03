@@ -32,7 +32,7 @@ This file contains configuration and context for Claude Code to help with develo
    - Queries relevant local guidelines via MCP tools
    - Calculates weight & evidence-based medication doses
    - Returns detailed management plans grounded in clinical guidelines
-   - **LIVE URL**: `https://heidimcp.uk`
+   - **LIVE URL**: `https://noteparser.uk`
 
 2. **Architecture diagram** (one-page PNG/PDF)
 
@@ -50,17 +50,18 @@ This file contains configuration and context for Claude Code to help with develo
 - **Data Storage**: JSON files (conditions.json with embedded medications, guidelines.json)
 - **Data Structure**: Conditions contain embedded medication dosing for streamlined clinical workflow
 - **Deployment**: AWS SST (Serverless Stack) with CloudFront CDN
-- **Domain**: heidimcp.uk (Cloudflare hosted)
+- **Domain**: noteparser.uk (Cloudflare hosted)
 - **Authentication**: Simple API key (MVP), upgrade to AWS Cognito later
 - **Cost**: ~$15-35/month for moderate usage
 - **Condition Identification**: Assessment-based diagnosis matching (prioritizes clinical assessment over symptom overlap)
 - **Sample Data**: 12 diverse clinical examples covering all 5 supported conditions
 
 ### Completed Tasks (All Phases)
+
 - ✅ **#001-#012**: Complete backend foundation with MCP server, Lambda handlers, and SST infrastructure
 - ✅ **#013**: API Gateway endpoints configured with authentication, health checks, and main processing
 - ✅ **#014**: CloudFront CDN configured with HTTPS redirect, compression, and optimized caching
-- ✅ **#015**: Configure custom domain (heidimcp.uk) and SSL with Cloudflare
+- ✅ **#015**: Configure custom domain (noteparser.uk) and SSL with Cloudflare
 - ✅ **#016**: Setup CloudWatch logging
 - ✅ **#017**: Deploy and test backend infrastructure
 - ✅ **#018-#026**: Complete frontend development with React, shadcn/ui, responsive design, and AWS deployment
@@ -69,7 +70,8 @@ This file contains configuration and context for Claude Code to help with develo
 - ✅ **Assessment-Based Diagnosis**: Refactored condition identification to prioritize clinical assessment over symptom matching
 
 ### Production Endpoints
-- **Frontend**: https://heidimcp.uk
+
+- **Frontend**: https://noteparser.uk
 - **API**: https://kolsmzlspg.execute-api.eu-west-2.amazonaws.com
 - **Status**: Fully operational with complete clinical decision support pipeline
 
@@ -78,11 +80,13 @@ This file contains configuration and context for Claude Code to help with develo
 The system includes 12 diverse clinical examples accessible via the "Load Random Sample" button:
 
 ### Pediatric Conditions
+
 - **Croup (4 cases)**: Jack T. (moderate), Emma S. (mild), Oliver M. (severe), Baby Sophie (6 months)
 - **Pneumonia (1 case)**: Tommy R. (5 years, bacterial pneumonia)
 - **Gastroenteritis (2 cases)**: Lily W. (3 years, dehydration), Charlie B. (18 months, mild)
 
 ### Adult Conditions
+
 - **Asthma (2 cases)**: David M. (moderate exacerbation), Robert H. (severe exacerbation)
 - **COPD (1 case)**: Margaret T. (68 years, infective exacerbation)
 - **Pneumonia (1 case)**: Sarah J. (31 years, community-acquired)
@@ -302,8 +306,8 @@ npx sst remove --stage prod
 aws cloudformation describe-stacks --stack-name prod-heidi-Web --query 'Stacks[0].StackStatus'
 
 # Configure Cloudflare DNS
-# Point heidimcp.uk to CloudFront distribution
-# Point api.heidimcp.uk to API Gateway
+# Point noteparser.uk to CloudFront distribution
+# Point api.noteparser.uk to API Gateway
 ```
 
 ### Environment Setup
@@ -358,10 +362,10 @@ uvicorn>=0.24.0
 ### Infrastructure Requirements
 
 - AWS Account with appropriate permissions
-- Node.js 18+ for SST and frontend (managed via .nvmrc)
+- Node.js 20+ for SST and frontend (managed via .nvmrc)
 - Python 3.9+ for MCP server
 - AWS CLI configured
-- **Domain**: heidimcp.uk (Cloudflare hosted)
+- **Domain**: noteparser.uk (Cloudflare hosted)
 - Cloudflare account for DNS management
 - NVM (Node Version Manager) for consistent Node.js versions
 
@@ -370,7 +374,7 @@ uvicorn>=0.24.0
 ### Node Version Management (.nvmrc)
 
 ```
-18.18.0
+20.18.1
 ```
 
 ### Backend (.env)
@@ -383,7 +387,7 @@ GUIDELINES_FILE=guidelines.json
 
 # API Configuration
 API_KEY=your-secure-api-key-here
-CORS_ORIGINS=https://heidimcp.uk,http://localhost:3000
+CORS_ORIGINS=https://noteparser.uk,http://localhost:3000
 
 # AWS Configuration
 AWS_REGION=us-east-1
@@ -399,7 +403,7 @@ ENVIRONMENT=development
 
 ```bash
 # API Configuration
-VITE_API_BASE_URL=https://api.heidimcp.uk
+VITE_API_BASE_URL=https://api.noteparser.uk
 VITE_API_KEY=your-secure-api-key-here
 VITE_APP_NAME=Heidi Clinical Decision Support
 VITE_APP_VERSION=1.0.0
@@ -415,7 +419,7 @@ VITE_ENVIRONMENT=development
 ```bash
 # Copy this to .env and fill in your values
 API_KEY=generate-a-secure-api-key
-CORS_ORIGINS=https://heidimcp.uk,http://localhost:3000
+CORS_ORIGINS=https://noteparser.uk,http://localhost:3000
 AWS_REGION=us-east-1
 AWS_ACCESS_KEY_ID=your-aws-access-key
 AWS_SECRET_ACCESS_KEY=your-aws-secret-key
@@ -427,7 +431,7 @@ ENVIRONMENT=development
 
 ```bash
 # Copy this to .env and fill in your values
-VITE_API_BASE_URL=https://api.heidimcp.uk
+VITE_API_BASE_URL=https://api.noteparser.uk
 VITE_API_KEY=your-secure-api-key
 VITE_APP_NAME=Heidi Clinical Decision Support
 VITE_APP_VERSION=1.0.0
@@ -473,6 +477,7 @@ See [docs/taskManagement.md](docs/taskManagement.md) for detailed task tracking 
 5. **Age Validation**: Age-appropriate conditions with penalties for mismatches
 
 **Implementation**:
+
 - **Assessment Keywords**: Each condition has specific diagnostic terms (e.g., "copd exacerbation", "acute asthma")
 - **Scoring System**: Assessment match = 10 points, symptoms = 2 points, age validation = ±1-3 points
 - **Fallback**: If no assessment match found, falls back to symptom matching
@@ -754,6 +759,6 @@ This is a medical decision support system that:
 - Deploys to AWS using SST (Serverless Stack) framework
 - **Node Version**: Managed via .nvmrc file
 - **Environment**: Secured via .env files (never committed)
-- **Domain**: heidimcp.uk (Cloudflare hosted)
+- **Domain**: noteparser.uk (Cloudflare hosted)
 
 IMPORTANT: This is a defensive medical tool to assist clinicians, not replace clinical judgment. All calculations and recommendations must be validated against established medical guidelines.

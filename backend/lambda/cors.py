@@ -17,8 +17,8 @@ def get_cors_headers(origin: str = None) -> Dict[str, str]:
     """
     # Allowed origins (can be made configurable via environment)
     allowed_origins = [
-        'https://heidimcp.uk',
-        'https://www.heidimcp.uk',
+        'https://noteparser.uk',
+        'https://www.noteparser.uk',
         'http://localhost:3000',
         'http://localhost:4000',  # Standard dev server port
         'http://localhost:5173',  # Vite dev server

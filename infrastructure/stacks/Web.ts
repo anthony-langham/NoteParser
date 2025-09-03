@@ -36,8 +36,8 @@ export function Web({ stack }: StackContext) {
   if (stack.stage === "prod" && site.cdk?.distribution) {
     const cfnDistribution = site.cdk.distribution.node.defaultChild as any;
     cfnDistribution.addPropertyOverride("DistributionConfig.Aliases", [
-      "heidimcp.uk",
-      "www.heidimcp.uk"
+      "noteparser.uk",
+      "www.noteparser.uk"
     ]);
     cfnDistribution.addPropertyOverride("DistributionConfig.ViewerCertificate", {
       AcmCertificateArn: "arn:aws:acm:us-east-1:146409062658:certificate/fdc74de3-d68d-422f-9f07-74527254e98d",
@@ -49,7 +49,7 @@ export function Web({ stack }: StackContext) {
   stack.addOutputs({
     SiteUrl: site.url,
     CloudFrontDistribution: site.cdk?.distribution?.distributionDomainName,
-    CustomDomain: stack.stage === "prod" ? "https://heidimcp.uk" : undefined,
+    CustomDomain: stack.stage === "prod" ? "https://noteparser.uk" : undefined,
   });
 
   return site;

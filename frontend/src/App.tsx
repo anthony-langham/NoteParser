@@ -17,25 +17,40 @@ function App() {
     setError(null)
     setLastNote(note)
     
-    const response = await apiService.processClinicalnote(note)
-    
-    if (response.success) {
-      setResult(response)
-    } else {
-      // Determine error type and provide appropriate message
-      let errorMessage = response.error || 'Failed to process clinical note.'
+    try {
+      const response = await apiService.processClinicalnote({ clinical_note: note })
       
-      if (response.error) {
-        if (response.error.includes('fetch')) {
-          errorMessage = 'Unable to connect to the server. Please check your internet connection and try again.'
-        } else if (response.error.includes('VITE_API')) {
-          errorMessage = 'Configuration error. Please contact support.'
-        } else if (response.error.includes('status: 401') || response.error.includes('status: 403')) {
-          errorMessage = 'Authentication failed. Please check your API key configuration.'
-        } else if (response.error.includes('status: 500')) {
-          errorMessage = 'Server error. The service may be temporarily unavailable.'
-        } else if (response.error.includes('status: 429')) {
-          errorMessage = 'Too many requests. Please wait a moment and try again.'
+      if (response.success || response.treatment_plan) {
+        setResult(response)
+      } else {
+        // Determine error type and provide appropriate message
+        let errorMessage = response.error || 'Failed to process clinical note.'
+        
+        if (response.error) {
+          if (response.error.includes('fetch')) {
+            errorMessage = 'Unable to connect to the server. Please check your internet connection and try again.'
+          } else if (response.error.includes('VITE_API')) {
+            errorMessage = 'Configuration error. Please contact support.'
+          } else if (response.error.includes('status: 401') || response.error.includes('status: 403')) {
+            errorMessage = 'Authentication failed. Please check your API key configuration.'
+          } else if (response.error.includes('status: 500')) {
+            errorMessage = 'Server error. The service may be temporarily unavailable.'
+          } else if (response.error.includes('status: 429')) {
+            errorMessage = 'Too many requests. Please wait a moment and try again.'
+          }
+        }
+        
+        setError(errorMessage)
+      }
+    } catch (error) {
+      console.error('API call failed:', error)
+      let errorMessage = 'Failed to process clinical note.'
+      
+      if (error instanceof Error) {
+        if (error.message.includes('fetch')) {
+          errorMessage = 'Unable to connect to the server. Please check your internet connection.'
+        } else {
+          errorMessage = error.message
         }
       }
       

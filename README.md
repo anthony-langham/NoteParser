@@ -305,7 +305,7 @@ GUIDELINES_FILE=guidelines.json
 
 # API Configuration
 API_KEY=your-secure-api-key-here
-CORS_ORIGINS=https://heidimcp.uk,http://localhost:3000
+CORS_ORIGINS=https://noteparser.uk,http://localhost:3000
 
 # Logging
 LOG_LEVEL=INFO
@@ -315,7 +315,7 @@ ENVIRONMENT=production
 #### Frontend (.env)
 ```bash
 # API Configuration
-VITE_API_BASE_URL=https://api.heidimcp.uk
+VITE_API_BASE_URL=https://api.noteparser.uk
 VITE_API_KEY=your-secure-api-key-here
 VITE_APP_NAME=Heidi Clinical Decision Support
 ```

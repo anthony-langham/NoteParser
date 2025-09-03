@@ -12,7 +12,7 @@ export function API({ stack }: StackContext) {
         environment: {
           PYTHONPATH: "/var/task:/opt/python",
           API_KEY: process.env.API_KEY || "dev-api-key-change-in-production",
-          CORS_ORIGINS: process.env.CORS_ORIGINS || "http://localhost:3000,https://heidimcp.uk",
+          CORS_ORIGINS: process.env.CORS_ORIGINS || "http://localhost:3000,https://noteparser.uk,https://www.noteparser.uk",
           LOG_LEVEL: process.env.LOG_LEVEL || "INFO",
           ENVIRONMENT: stack.stage,
           DATA_PATH: "/var/task/mcp_server/data/",
@@ -29,7 +29,7 @@ export function API({ stack }: StackContext) {
       },
     },
     // Custom domain disabled - using Cloudflare DNS, will point to API Gateway URL directly
-    // customDomain: stack.stage === "prod" ? "api.heidimcp.uk" : undefined,
+    // customDomain: stack.stage === "prod" ? "api.noteparser.uk" : undefined,
     cdk: {
       restApi: {
         deployOptions: {
