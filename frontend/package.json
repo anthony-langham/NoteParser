@@ -1,7 +1,7 @@
 {
-  "name": "heidi-frontend",
+  "name": "noteparser-frontend",
   "version": "1.0.0",
-  "description": "Heidi Clinical Decision Support Frontend",
+  "description": "NoteParser Clinical Decision Support Frontend",
   "type": "module",
   "scripts": {
     "dev": "vite",

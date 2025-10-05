@@ -77,7 +77,7 @@ function App() {
       <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8">
         <div className="text-center space-y-2 px-2">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
-            Heidi Clinical Decision Support
+            NoteParser Clinical Decision Support
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
             Evidence-based treatment recommendations powered by MCP
