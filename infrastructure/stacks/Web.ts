@@ -5,7 +5,7 @@ import { API } from "./API";
 export function Web({ stack }: StackContext) {
   const api = use(API);
 
-  const site = new StaticSite(stack, "frontend", {
+  const site = new StaticSite(stack, "site", {
     path: "../frontend",
     buildCommand: "npm run build",
     buildOutput: "dist",
@@ -40,7 +40,7 @@ export function Web({ stack }: StackContext) {
       "www.noteparser.uk"
     ]);
     cfnDistribution.addPropertyOverride("DistributionConfig.ViewerCertificate", {
-      AcmCertificateArn: "arn:aws:acm:us-east-1:146409062658:certificate/fdc74de3-d68d-422f-9f07-74527254e98d",
+      AcmCertificateArn: "arn:aws:acm:us-east-1:146409062658:certificate/62994415-25f6-494e-b371-cdea68b0f9ec",
       SslSupportMethod: "sni-only",
       MinimumProtocolVersion: "TLSv1.2_2021"
     });
